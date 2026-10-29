@@ -1,0 +1,8 @@
+{
+  "name": "MONOFLOW // Habit & Expense Studio",
+  "short_name": "MONOFLOW",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a"
+}

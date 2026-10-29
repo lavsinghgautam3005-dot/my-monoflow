@@ -1,0 +1,2649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MONO // Habit & Expense Studio</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-subtle: #f7f7f7;
+      --fg: #0a0a0a;
+      --fg-muted: #666666;
+      --border: #e2e2e2;
+      --border-strong: #0a0a0a;
+      --accent: #0a0a0a;
+      --accent-fg: #ffffff;
+    }
+
+    html.dark {
+      --bg: #0a0a0a;
+      --bg-subtle: #141414;
+      --fg: #f5f5f5;
+      --fg-muted: #8c8c8c;
+      --border: #262626;
+      --border-strong: #f5f5f5;
+      --accent: #f5f5f5;
+      --accent-fg: #0a0a0a;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .mono-card {
+      background-color: var(--bg);
+      border: 1px solid var(--border);
+      transition: border-color 0.15s ease, background-color 0.2s ease;
+    }
+
+    .mono-card:hover {
+      border-color: var(--border-strong);
+    }
+
+    .mono-subtle {
+      background-color: var(--bg-subtle);
+      border: 1px solid var(--border);
+    }
+
+    .mono-btn-primary {
+      background-color: var(--accent);
+      color: var(--accent-fg);
+      border: 1px solid var(--accent);
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+
+    .mono-btn-primary:hover {
+      opacity: 0.88;
+    }
+
+    .mono-btn-outline {
+      background-color: transparent;
+      color: var(--fg);
+      border: 1px solid var(--border);
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .mono-btn-outline:hover,
+    .mono-btn-outline.active {
+      border-color: var(--border-strong);
+      background-color: var(--bg-subtle);
+    }
+
+    .mono-input {
+      background-color: var(--bg);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .mono-input:focus {
+      border-color: var(--border-strong);
+    }
+
+    .muted-text {
+      color: var(--fg-muted);
+    }
+
+    .divider {
+      border-color: var(--border);
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-neutral-500 selection:text-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+    <!-- Top Header -->
+    <header class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b divider">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 flex items-center justify-center mono-btn-primary font-bold mono text-sm tracking-tighter rounded-sm">
+          M//F
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg font-semibold tracking-tight">MONOFLOW</h1>
+            <span class="mono text-[11px] px-2 py-0.5 rounded-sm mono-subtle">STEP 06 // LAUNCH &amp; PWA STUDIO</span>
+          </div>
+          <p class="text-xs muted-text">Minimalist Habit &amp; Expense Workspace</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- View Switcher -->
+        <div class="flex items-center rounded-sm p-0.5 mono-subtle text-xs font-medium">
+          <button id="tabAllBtn" class="px-2.5 py-1 rounded-sm mono-btn-primary" type="button">Dashboard</button>
+          <button id="tabIntegrationsBtn" class="px-2.5 py-1 rounded-sm" type="button">Ecosystem Hub</button>
+          <button id="tabScorecardBtn" class="px-2.5 py-1 rounded-sm" type="button">Scorecard</button>
+          <button id="tabLaunchBtn" class="px-2.5 py-1 rounded-sm" type="button">Launch &amp; PWA</button>
+        </div>
+
+        <!-- Step 4: Quick Command Palette Trigger -->
+        <button id="openCmdPaletteBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5" aria-label="Open Quick Command Palette">
+          <span>CMD</span>
+          <kbd class="px-1 py-0.2 text-[10px] mono-subtle rounded-sm">Ctrl+K</kbd>
+        </button>
+
+        <!-- High-Contrast Theme Toggle -->
+        <button id="themeToggleBtn" type="button" class="mono-btn-outline px-3 py-1.5 rounded-sm text-xs font-medium flex items-center gap-2" aria-label="Toggle Light and Dark Contrast Theme">
+          <span id="themeIndicator" class="w-2.5 h-2.5 rounded-full bg-current inline-block"></span>
+          <span id="themeLabel" class="mono">LIGHT // B&amp;W</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Toast Notification Banner -->
+    <div id="statusToast" class="hidden mt-4 px-4 py-2.5 rounded-sm mono-subtle flex items-center justify-between text-xs mono">
+      <span id="statusToastText">Ready.</span>
+      <button id="closeToastBtn" type="button" class="underline ml-4">Dismiss</button>
+    </div>
+
+    <!-- Summary KPI Strip -->
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-6">
+      <div class="mono-card p-4 rounded-sm">
+        <p class="text-[11px] uppercase tracking-wider muted-text mono">Today's Habits</p>
+        <div class="mt-2 flex items-baseline justify-between">
+          <span id="kpiHabitCompletion" class="text-2xl font-semibold mono">0/0</span>
+          <span id="kpiHabitPercent" class="text-xs muted-text mono">0%</span>
+        </div>
+      </div>
+
+      <div class="mono-card p-4 rounded-sm">
+        <p class="text-[11px] uppercase tracking-wider muted-text mono">Best Active Streak</p>
+        <div class="mt-2 flex items-baseline justify-between">
+          <span id="kpiBestStreak" class="text-2xl font-semibold mono">0d</span>
+          <span class="text-xs muted-text mono">consistency</span>
+        </div>
+      </div>
+
+      <div class="mono-card p-4 rounded-sm">
+        <p class="text-[11px] uppercase tracking-wider muted-text mono">Total Spent</p>
+        <div class="mt-2 flex items-baseline justify-between">
+          <span id="kpiTotalSpent" class="text-2xl font-semibold mono">₹0</span>
+          <span id="kpiExpenseCount" class="text-xs muted-text mono">0 items</span>
+        </div>
+      </div>
+
+      <div class="mono-card p-4 rounded-sm">
+        <p class="text-[11px] uppercase tracking-wider muted-text mono">Connected Nodes</p>
+        <div class="mt-2 flex items-baseline justify-between">
+          <span id="kpiConnectedCount" class="text-2xl font-semibold mono">4/7</span>
+          <span class="text-xs muted-text mono">sandbox link</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: DAILY BUDGET CAP & HABIT CORRELATION BAR -->
+    <section class="mono-card p-4 rounded-sm mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex-1 min-w-[240px]">
+          <div class="flex items-center justify-between text-xs mono">
+            <span class="uppercase tracking-wider muted-text">00 // Daily Budget Cap &amp; Habit Guardrail</span>
+            <span id="budgetStatusBadge" class="px-2 py-0.5 rounded-sm mono-subtle font-medium">UNDER CAP // STREAK SAFE</span>
+          </div>
+          <div class="w-full h-2 mono-subtle rounded-sm overflow-hidden mt-2">
+            <div id="budgetProgressBar" class="h-full transition-all duration-300" style="width: 45%; background-color: var(--fg);"></div>
+          </div>
+          <div class="flex items-center justify-between text-[11px] mono muted-text mt-1.5">
+            <span>Today's Spend: <strong id="todaySpendLabel" class=" style='color: var(--fg);'">₹420</strong> / Cap: <strong id="dailyCapLabel">₹600</strong></span>
+            <span id="noSpendHabitLinkText">Linked to "Zero Impulse Spending" ritual</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label for="dailyCapInput" class="text-xs mono muted-text">Cap (₹):</label>
+          <input id="dailyCapInput" type="number" min="100" step="50" value="600" class="mono-input w-24 px-2.5 py-1.5 text-xs mono rounded-sm" />
+          <button id="saveCapBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">Set Cap</button>
+          <button id="syncNoSpendHabitBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">Verify No-Spend</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: MINIMALIST POMODORO FOCUS TIMER & HABIT SESSION BAR -->
+    <section class="mono-card p-4 rounded-sm mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="px-3 py-2 rounded-sm mono-subtle text-center min-w-[96px]">
+            <span id="pomodoroTimeDisplay" class="text-xl font-bold mono tracking-tight">25:00</span>
+            <p id="pomodoroModeBadge" class="text-[10px] mono uppercase muted-text">FOCUS // 25M</p>
+          </div>
+          <div>
+            <span class="mono text-[10px] uppercase tracking-widest muted-text">00B // Ritual Focus Timer</span>
+            <div class="flex flex-wrap items-center gap-2 mt-1">
+              <label for="pomodoroHabitSelect" class="text-xs muted-text">Target Habit:</label>
+              <select id="pomodoroHabitSelect" class="mono-input px-2.5 py-1 text-xs rounded-sm"></select>
+            </div>
+            <p class="text-[11px] muted-text mono mt-1">
+              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                <input id="pomodoroSyncAudioCheckbox" type="checkbox" checked class="accent-current" />
+                <span>Auto-play monochrome focus synth while timer runs</span>
+              </label>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <button id="pomodoroStartPauseBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">START TIMER</button>
+          <button id="pomodoroModeToggleBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm">25m / 5m</button>
+          <button id="pomodoroResetBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm">Reset</button>
+          <button id="pomodoroCompleteHabitBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">Complete Ritual ✓</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MAIN DASHBOARD VIEW -->
+    <main id="dashboardView" class="space-y-6">
+      <!-- Two-Column Core Modules: Habit Tracker (Task 1) + Expense Log (Task 4) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- MODULE 1: HABIT TRACKER -->
+        <section class="mono-card p-5 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">01 // Daily Rituals</span>
+                <h2 class="text-base font-semibold tracking-tight">Habit Tracker</h2>
+              </div>
+              <button id="resetTodayHabitsBtn" type="button" class="text-xs muted-text hover:underline mono">Reset Today</button>
+            </div>
+
+            <!-- Add Habit Form with Category Tag -->
+            <form id="habitForm" class="mt-4 grid grid-cols-1 sm:grid-cols-12 gap-2">
+              <input
+                id="habitNameInput"
+                type="text"
+                placeholder="New habit (e.g., Read 20 pages, Morning run)..."
+                class="mono-input sm:col-span-7 px-3 py-2 text-xs rounded-sm"
+                required
+              />
+              <select
+                id="habitCategoryInput"
+                class="mono-input sm:col-span-3 px-2 py-2 text-xs rounded-sm mono"
+                aria-label="Habit category tag"
+              >
+                <option value="Focus">Focus</option>
+                <option value="Finance">Finance</option>
+                <option value="Health">Health</option>
+                <option value="Mind">Mind</option>
+              </select>
+              <button type="submit" class="mono-btn-primary sm:col-span-2 px-3 py-2 text-xs font-medium rounded-sm mono">
+                + ADD
+              </button>
+            </form>
+
+            <!-- Habit List -->
+            <div id="habitList" class="mt-4 divide-y divider max-h-72 overflow-y-auto pr-1"></div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t divider flex items-center justify-between text-[11px] muted-text mono">
+            <span>Click checkbox to complete today &amp; +1 streak</span>
+            <span id="habitSummaryFooter">0 active rituals</span>
+          </div>
+        </section>
+
+        <!-- MODULE 2: PERSONAL EXPENSE LOG -->
+        <section class="mono-card p-5 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">02 // Ledger</span>
+                <h2 class="text-base font-semibold tracking-tight">Personal Expense Log</h2>
+              </div>
+              <select id="expenseFilterSelect" class="mono-input text-xs px-2 py-1 rounded-sm mono" aria-label="Filter expenses by category">
+                <option value="ALL">All Categories</option>
+                <option value="Food">Food</option>
+                <option value="Study & Tech">Study &amp; Tech</option>
+                <option value="Transport">Transport</option>
+                <option value="Lifestyle">Lifestyle</option>
+              </select>
+            </div>
+
+            <!-- Add Expense Form -->
+            <form id="expenseForm" class="mt-4 grid grid-cols-1 sm:grid-cols-12 gap-2">
+              <input
+                id="expenseTitleInput"
+                type="text"
+                placeholder="Item (e.g., Iced coffee, Notion Plus)"
+                class="mono-input sm:col-span-5 px-3 py-2 text-xs rounded-sm"
+                required
+              />
+              <input
+                id="expenseAmountInput"
+                type="number"
+                min="1"
+                step="any"
+                placeholder="₹ Amount"
+                class="mono-input sm:col-span-3 px-3 py-2 text-xs rounded-sm mono"
+                required
+              />
+              <select
+                id="expenseCategoryInput"
+                class="mono-input sm:col-span-2 px-2 py-2 text-xs rounded-sm"
+                aria-label="Expense category"
+              >
+                <option value="Food">Food</option>
+                <option value="Study & Tech">Study &amp; Tech</option>
+                <option value="Transport">Transport</option>
+                <option value="Lifestyle">Lifestyle</option>
+              </select>
+              <button type="submit" class="mono-btn-primary sm:col-span-2 px-3 py-2 text-xs font-medium rounded-sm mono">
+                + LOG
+              </button>
+            </form>
+
+            <!-- Expense List -->
+            <div id="expenseList" class="mt-4 divide-y divider max-h-72 overflow-y-auto pr-1"></div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t divider flex items-center justify-between text-[11px] muted-text mono">
+            <span>Filtered Total: <strong id="filteredExpenseTotal">₹0</strong></span>
+            <button id="clearExpensesBtn" type="button" class="hover:underline">Clear All</button>
+          </div>
+        </section>
+      </div>
+
+      <!-- MODULE 3: MINIMALIST GRAPHS (STREAK + SPENDING) -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Streak Bar Chart -->
+        <section class="mono-card p-5 rounded-sm">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <span class="mono text-[10px] uppercase tracking-widest muted-text">03 // Visual Analytics</span>
+              <h3 class="text-sm font-semibold">Habit Streak Velocity (Days)</h3>
+            </div>
+            <span class="mono text-[11px] muted-text">Monochrome Bar</span>
+          </div>
+          <div class="relative h-60">
+            <canvas id="streakChartCanvas"></canvas>
+          </div>
+        </section>
+
+        <!-- Category Expense Chart -->
+        <section class="mono-card p-5 rounded-sm">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <span class="mono text-[10px] uppercase tracking-widest muted-text">04 // Allocation</span>
+              <h3 class="text-sm font-semibold">Spending by Category (₹)</h3>
+            </div>
+            <span class="mono text-[11px] muted-text">Real-Time Sync</span>
+          </div>
+          <div class="relative h-60">
+            <canvas id="expenseChartCanvas"></canvas>
+          </div>
+        </section>
+      </div>
+
+      <!-- STEP 2: 7-DAY STREAK MATRIX & HABIT-EXPENSE CORRELATION GRAPH -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- 7-Day Minimalist Streak Heatmap Grid -->
+        <section class="mono-card p-5 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">05 // 7-Day Consistency Matrix</span>
+                <h3 class="text-sm font-semibold">Weekly Ritual Grid (Click Any Square)</h3>
+              </div>
+              <span id="weeklyMatrixScore" class="mono text-xs px-2 py-0.5 rounded-sm mono-subtle">0% Weekly</span>
+            </div>
+            <div id="streakMatrixContainer" class="mt-4 space-y-2.5 overflow-x-auto"></div>
+          </div>
+          <div class="mt-4 pt-3 border-t divider flex items-center justify-between text-[11px] muted-text mono">
+            <span>Filled square = completed day</span>
+            <span>M • T • W • T • F • S • S</span>
+          </div>
+        </section>
+
+        <!-- 7-Day Habit Completion vs Spending Correlation Graph -->
+        <section class="mono-card p-5 rounded-sm">
+          <div class="flex items-center justify-between mb-3">
+            <div>
+              <span class="mono text-[10px] uppercase tracking-widest muted-text">06 // Behavioral Correlation</span>
+              <h3 class="text-sm font-semibold">7-Day Habit Score (%) vs. Daily Spend (₹)</h3>
+            </div>
+            <span class="mono text-[11px] muted-text">Dual-Axis Trend</span>
+          </div>
+          <div class="relative h-60">
+            <canvas id="correlationChartCanvas"></canvas>
+          </div>
+        </section>
+      </div>
+
+      <!-- STEP 2: GOOGLE WORKSPACE ONE-CLICK EXPORT DOCK -->
+      <section class="mono-card p-5 rounded-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b divider">
+          <div>
+            <span class="mono text-[10px] uppercase tracking-widest muted-text">07 // Google Workspace Direct Dispatch</span>
+            <h3 class="text-sm font-semibold">One-Click Export to Google Tasks, Calendar &amp; Keep</h3>
+          </div>
+          <span class="mono text-[11px] muted-text">Instant Payload Generator</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+          <button id="exportGoogleTasksBtn" type="button" class="mono-btn-outline p-3 rounded-sm text-left flex flex-col justify-between gap-2">
+            <div class="flex items-center justify-between w-full">
+              <span class="mono text-xs font-semibold">Google Tasks</span>
+              <span class="mono text-[10px] px-1.5 py-0.5 mono-subtle rounded-sm">CHECKLIST</span>
+            </div>
+            <p class="text-[11px] muted-text">Format uncompleted daily rituals into a Google Tasks checklist &amp; copy.</p>
+          </button>
+
+          <button id="exportGoogleCalBtn" type="button" class="mono-btn-outline p-3 rounded-sm text-left flex flex-col justify-between gap-2">
+            <div class="flex items-center justify-between w-full">
+              <span class="mono text-xs font-semibold">Google Calendar</span>
+              <span class="mono text-[10px] px-1.5 py-0.5 mono-subtle rounded-sm">TIME BLOCK</span>
+            </div>
+            <p class="text-[11px] muted-text">Generate a pre-filled Google Calendar event link for your morning habit block.</p>
+          </button>
+
+          <button id="exportGoogleKeepBtn" type="button" class="mono-btn-outline p-3 rounded-sm text-left flex flex-col justify-between gap-2">
+            <div class="flex items-center justify-between w-full">
+              <span class="mono text-xs font-semibold">Google Keep &amp; Notes</span>
+              <span class="mono text-[10px] px-1.5 py-0.5 mono-subtle rounded-sm">NOTE SNAPSHOT</span>
+            </div>
+            <p class="text-[11px] muted-text">Compile today's streak matrix &amp; expense ledger into a minimalist Keep note.</p>
+          </button>
+        </div>
+
+        <!-- Workspace Export Preview Drawer -->
+        <div id="workspaceExportDrawer" class="hidden mt-4 p-4 rounded-sm mono-subtle">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b divider">
+            <span id="workspaceExportTitle" class="mono text-xs font-semibold">GOOGLE WORKSPACE PAYLOAD</span>
+            <div class="flex items-center gap-2">
+              <button id="copyExportPayloadBtn" type="button" class="mono-btn-primary px-3 py-1 text-xs mono rounded-sm">Copy Text</button>
+              <a id="openExternalGoogleUrl" href="https://calendar.google.com" target="_blank" rel="noopener noreferrer" class="mono-btn-outline px-3 py-1 text-xs mono rounded-sm inline-block">Open App &nearr;</a>
+              <button id="closeExportDrawerBtn" type="button" class="text-xs mono muted-text hover:underline ml-1">Close</button>
+            </div>
+          </div>
+          <pre id="workspaceExportContent" class="mt-3 text-xs mono whitespace-pre-wrap leading-relaxed overflow-x-auto"></pre>
+        </div>
+      </section>
+
+      <!-- STEP 5: 30-DAY SAVINGS PROJECTION & MONTHLY GOAL SIMULATOR -->
+      <section class="mono-card p-5 rounded-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b divider">
+          <div>
+            <span class="mono text-[10px] uppercase tracking-widest muted-text">10 // 30-Day Runway &amp; Savings Forecast</span>
+            <h3 class="text-sm font-semibold">Monthly Income, Cap Trajectory &amp; Projected Savings</h3>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <label for="monthlyIncomeInput" class="text-xs mono muted-text">Monthly Budget/Allowance (₹):</label>
+            <input id="monthlyIncomeInput" type="number" min="1000" step="500" value="25000" class="mono-input w-28 px-2.5 py-1 text-xs mono rounded-sm" />
+            <button id="saveMonthlyIncomeBtn" type="button" class="mono-btn-outline px-3 py-1 text-xs mono rounded-sm">Update</button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
+          <div class="mono-subtle p-3 rounded-sm">
+            <span class="text-[10px] mono uppercase muted-text">30-Day Cap Spend</span>
+            <p id="projCapSpendLabel" class="text-base font-semibold mono mt-1">₹18,000</p>
+            <span class="text-[10px] mono muted-text">If you stay at daily cap</span>
+          </div>
+          <div class="mono-subtle p-3 rounded-sm">
+            <span class="text-[10px] mono uppercase muted-text">Projected 30-Day Burn</span>
+            <p id="projActualSpendLabel" class="text-base font-semibold mono mt-1">₹12,600</p>
+            <span class="text-[10px] mono muted-text">Based on current pace</span>
+          </div>
+          <div class="mono-subtle p-3 rounded-sm">
+            <span class="text-[10px] mono uppercase muted-text">Projected Monthly Savings</span>
+            <p id="projMonthlySavingsLabel" class="text-base font-semibold mono mt-1">₹12,400</p>
+            <span id="projSavingsRateBadge" class="text-[10px] mono muted-text">49% savings rate</span>
+          </div>
+        </div>
+
+        <div class="relative h-56">
+          <canvas id="projectionChartCanvas"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <!-- ECOSYSTEM & INTEGRATIONS HUB VIEW (Google Apps, Gemini, Notion, Slack, Spotify) -->
+    <section id="integrationsView" class="space-y-6 hidden">
+      <div class="mono-card p-5 rounded-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b divider">
+          <div>
+            <span class="mono text-[10px] uppercase tracking-widest muted-text">05 // Connected Ecosystem Preview</span>
+            <h2 class="text-base font-semibold">Google Workspace, Gemini, Notion, Slack &amp; Spotify Bridge</h2>
+            <p class="text-xs muted-text mt-0.5">
+              Toggle connections below or trigger a quick action to test how your habits and expenses flow across your tools.
+            </p>
+          </div>
+          <button id="syncAllServicesBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">
+            SYNC ACTIVE NODES
+          </button>
+        </div>
+
+        <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"></div>
+      </div>
+
+      <!-- STEP 3: Interactive Gemini Coach + Spotify Web Audio Focus Synth -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Interactive Google Gemini Coach -->
+        <div class="mono-card p-5 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">AI Co-Pilot // Live Telemetry</span>
+                <h3 class="text-sm font-semibold">Google Gemini Minimalist Coach</h3>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <select id="geminiModeSelect" class="mono-input px-2 py-1 text-xs mono rounded-sm" aria-label="Select Gemini Coaching Mode">
+                  <option value="digest">Executive Digest</option>
+                  <option value="rescue">Streak Rescue Plan</option>
+                  <option value="audit">80/20 Expense Audit</option>
+                  <option value="stack">Habit Stacking Idea</option>
+                </select>
+                <button id="generateGeminiDigestBtn" type="button" class="mono-btn-primary px-2.5 py-1 text-xs mono rounded-sm">
+                  Generate Insight
+                </button>
+              </div>
+            </div>
+
+            <!-- Quick Mode Pills -->
+            <div class="flex flex-wrap gap-1.5 mt-3">
+              <button type="button" data-gemini-mode="rescue" class="geminiQuickModeBtn mono-btn-outline px-2 py-1 text-[11px] mono rounded-sm">Streak Rescue</button>
+              <button type="button" data-gemini-mode="audit" class="geminiQuickModeBtn mono-btn-outline px-2 py-1 text-[11px] mono rounded-sm">80/20 Budget Audit</button>
+              <button type="button" data-gemini-mode="stack" class="geminiQuickModeBtn mono-btn-outline px-2 py-1 text-[11px] mono rounded-sm">Habit Stacking</button>
+            </div>
+
+            <div class="mt-3 p-3 rounded-sm mono-subtle">
+              <p id="geminiDigestOutput" class="text-xs leading-relaxed mono">
+                Select a coaching mode above or ask a question below to analyze your live streaks and spending balance.
+              </p>
+            </div>
+          </div>
+
+          <!-- Custom Prompt Input -->
+          <form id="geminiPromptForm" class="mt-3 flex gap-2">
+            <input
+              id="geminiPromptInput"
+              type="text"
+              placeholder="Ask Gemini about your habits or budget (e.g., How can I save ₹200?)..."
+              class="mono-input flex-1 px-3 py-1.5 text-xs rounded-sm"
+            />
+            <button type="submit" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">Ask &rarr;</button>
+          </form>
+        </div>
+
+        <!-- Spotify Monochrome Focus Deck + Web Audio Ambient Synth -->
+        <div class="mono-card p-5 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">Focus Audio // Web Audio Synth</span>
+                <h3 class="text-sm font-semibold">Spotify Monochrome Focus Deck</h3>
+              </div>
+              <div class="flex items-center gap-2">
+                <span id="spotifyStateBadge" class="mono text-[11px] px-2 py-0.5 mono-subtle rounded-sm">PAUSED</span>
+                <a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer" class="mono text-[11px] underline muted-text">Spotify &nearr;</a>
+              </div>
+            </div>
+
+            <div class="mt-3 flex items-center justify-between gap-2">
+              <div>
+                <p id="spotifyTrackTitle" class="text-xs font-medium">Deep Work Minimalist Piano // 01</p>
+                <p id="spotifySynthDesc" class="text-[11px] muted-text mono">Warm Harmonic Drone • 110 Hz + 220 Hz</p>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button id="spotifyPlayPauseBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">
+                  PLAY
+                </button>
+                <button id="spotifyNextTrackBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm">
+                  NEXT &rarr;
+                </button>
+                <button id="spotifyMuteBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm" aria-label="Mute focus audio">
+                  MUTE
+                </button>
+              </div>
+            </div>
+
+            <!-- Monochrome Equalizer / Waveform Visualizer -->
+            <div id="focusVisualizerBar" class="mt-4 h-10 mono-subtle rounded-sm px-3 flex items-end justify-between gap-1 py-2 overflow-hidden">
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 20%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 35%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 25%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 45%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 30%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 50%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 25%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 40%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 20%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 35%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 30%;"></div>
+              <div class="synth-bar flex-1 bg-current transition-all duration-150" style="height: 20%;"></div>
+            </div>
+          </div>
+
+          <div class="mt-3 pt-3 border-t divider flex items-center justify-between gap-3 text-[11px] mono muted-text">
+            <label for="spotifyVolumeSlider" class="shrink-0">Synth Gain:</label>
+            <input id="spotifyVolumeSlider" type="range" min="0" max="100" value="35" class="w-full accent-current cursor-pointer" />
+            <span id="spotifyVolumeLabel" class="w-9 text-right">35%</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: NOTION DATABASE EXPORTER & SLACK DAILY CHECK-IN COMPOSER -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Notion Database Exporter -->
+        <div class="mono-card p-5 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">08 // Notion Workspace Bridge</span>
+                <h3 class="text-sm font-semibold">Notion Markdown &amp; CSV Database Export</h3>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button id="copyNotionMdBtn" type="button" class="mono-btn-primary px-2.5 py-1 text-xs mono rounded-sm">Copy Markdown</button>
+                <button id="downloadNotionCsvBtn" type="button" class="mono-btn-outline px-2.5 py-1 text-xs mono rounded-sm">Download .CSV</button>
+              </div>
+            </div>
+            <p class="text-xs muted-text mt-2">
+              Paste the Markdown table directly into any <a href="https://www.notion.so/" target="_blank" rel="noopener noreferrer" class="underline">Notion</a> page, or import the CSV file into a Notion database.
+            </p>
+            <pre id="notionMarkdownPreview" class="mt-3 p-3 rounded-sm mono-subtle text-[11px] mono overflow-x-auto whitespace-pre leading-relaxed max-h-48"></pre>
+          </div>
+        </div>
+
+        <!-- Slack Daily Accountability Standup Composer -->
+        <div class="mono-card p-5 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">09 // Slack Team &amp; Accountability Bridge</span>
+                <h3 class="text-sm font-semibold">Slack Daily Check-In Composer</h3>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <select id="slackChannelSelect" class="mono-input px-2 py-1 text-xs mono rounded-sm" aria-label="Select Slack Channel">
+                  <option value="#daily-rituals">#daily-rituals</option>
+                  <option value="#accountability">#accountability</option>
+                  <option value="#budget-log">#budget-log</option>
+                </select>
+                <button id="copySlackMsgBtn" type="button" class="mono-btn-primary px-2.5 py-1 text-xs mono rounded-sm">Copy Check-In</button>
+              </div>
+            </div>
+            <p class="text-xs muted-text mt-2">
+              Formatted with Slack Block markdown so you can drop your daily streak and budget status into <a href="https://slack.com/" target="_blank" rel="noopener noreferrer" class="underline">Slack</a>.
+            </p>
+            <pre id="slackMessagePreview" class="mt-3 p-3 rounded-sm mono-subtle text-[11px] mono overflow-x-auto whitespace-pre-wrap leading-relaxed max-h-48"></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 5: MINIMALIST WEEKLY SCORECARD & LIVE CHAT SYNC VIEW -->
+    <section id="scorecardView" class="space-y-6 hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Monochrome Printable Receipt Scorecard -->
+        <div class="lg:col-span-7 mono-card p-6 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">11 // Minimalist Dossier</span>
+                <h2 class="text-base font-semibold">Weekly Monochrome Receipt Scorecard</h2>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="copyScorecardReceiptBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">Copy Receipt</button>
+                <button id="printScorecardBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">Print / Save PDF</button>
+              </div>
+            </div>
+
+            <pre id="monochromeReceiptPre" class="mt-4 p-4 rounded-sm mono-subtle text-xs mono leading-relaxed overflow-x-auto whitespace-pre"></pre>
+          </div>
+        </div>
+
+        <!-- Live Gemini Chat Sync Prompt Generator -->
+        <div class="lg:col-span-5 mono-card p-6 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="pb-4 border-b divider">
+              <span class="mono text-[10px] uppercase tracking-widest muted-text">12 // Live Assistant Bridge</span>
+              <h2 class="text-base font-semibold">Real Google Account Sync Command</h2>
+              <p class="text-xs muted-text mt-1">
+                Want me to create real events in your Google Calendar, tasks in Google Tasks, or notes in Google Keep right now? Copy the live sync command below and paste it into our chat.
+              </p>
+            </div>
+
+            <pre id="liveChatSyncPromptPre" class="mt-4 p-3 rounded-sm mono-subtle text-xs mono whitespace-pre-wrap leading-relaxed"></pre>
+          </div>
+
+          <div class="mt-4 pt-3 border-t divider flex items-center justify-between">
+            <span class="text-[11px] mono muted-text">Updates automatically with your state</span>
+            <button id="copyLiveChatPromptBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">
+              Copy Chat Command
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 6: LAUNCH, MOBILE PWA & CODE X-RAY VIEW -->
+    <section id="launchView" class="space-y-6 hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left 7 Cols: Interactive Launch & PWA Export Center -->
+        <div class="lg:col-span-7 mono-card p-6 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b divider">
+              <div>
+                <span class="mono text-[10px] uppercase tracking-widest muted-text">13 // Ship Your First App</span>
+                <h2 class="text-base font-semibold">Standalone App Export &amp; Free Web Hosting Checklist</h2>
+              </div>
+              <span id="launchChecklistBadge" class="mono text-xs px-2 py-0.5 rounded-sm mono-subtle">0/4 Shipped</span>
+            </div>
+
+            <p class="text-xs muted-text mt-3">
+              Because MONOFLOW is built as a zero-dependency single-file architecture, you can run it offline on any laptop or publish it online in under 60 seconds.
+            </p>
+
+            <!-- Export Package Buttons -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+              <button id="downloadStandaloneHtmlBtn" type="button" class="mono-btn-primary p-3 rounded-sm text-left flex flex-col justify-between gap-1">
+                <span class="mono text-xs font-semibold">&darr; Download index.html</span>
+                <span class="text-[11px] opacity-80">Complete standalone web app file ready to open in any browser or deploy.</span>
+              </button>
+
+              <button id="downloadPwaManifestBtn" type="button" class="mono-btn-outline p-3 rounded-sm text-left flex flex-col justify-between gap-1">
+                <span class="mono text-xs font-semibold">&darr; Download manifest.json</span>
+                <span class="text-[11px] muted-text">PWA manifest so iOS, Android &amp; Chrome install MONOFLOW like a native app.</span>
+              </button>
+            </div>
+
+            <!-- Interactive 4-Step Launch Checklist -->
+            <div id="launchChecklistContainer" class="mt-5 divide-y divider"></div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t divider flex flex-wrap items-center justify-between gap-2 text-[11px] mono muted-text">
+            <span>Free hosts: <a href="https://app.netlify.com/drop" target="_blank" rel="noopener noreferrer" class="underline">Netlify Drop</a> • <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer" class="underline">GitHub Pages</a> • <a href="https://vercel.com/" target="_blank" rel="noopener noreferrer" class="underline">Vercel</a></span>
+            <span>PWA Ready</span>
+          </div>
+        </div>
+
+        <!-- Right 5 Cols: Beginner Code X-Ray (How Your App Works) -->
+        <div class="lg:col-span-5 mono-card p-6 rounded-sm flex flex-col justify-between">
+          <div>
+            <div class="pb-4 border-b divider">
+              <span class="mono text-[10px] uppercase tracking-widest muted-text">14 // Beginner Architecture X-Ray</span>
+              <h2 class="text-base font-semibold">Inspect Each Layer You Built</h2>
+              <p class="text-xs muted-text mt-1">
+                Click any layer below to inspect the exact pattern powering your app from Step 1 to Step 6.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mt-4">
+              <button type="button" data-xray="theme" class="xrayLayerBtn mono-btn-primary px-2.5 py-1.5 text-xs mono rounded-sm text-left">01. CSS Contrast</button>
+              <button type="button" data-xray="state" class="xrayLayerBtn mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm text-left">02. JS State</button>
+              <button type="button" data-xray="charts" class="xrayLayerBtn mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm text-left">03. Live Charts</button>
+              <button type="button" data-xray="bridges" class="xrayLayerBtn mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm text-left">04. App Bridges</button>
+            </div>
+
+            <pre id="xrayCodePreview" class="mt-4 p-3 rounded-sm mono-subtle text-[11px] mono whitespace-pre-wrap leading-relaxed overflow-x-auto"></pre>
+          </div>
+
+          <div class="mt-4 pt-3 border-t divider text-[11px] mono muted-text">
+            <span>Tip: Open your downloaded index.html in VS Code to tweak any line!</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: DATA PORTABILITY & BACKUP BAR (.JSON) -->
+    <footer class="mt-8 pt-6 border-t divider flex flex-wrap items-center justify-between gap-4 text-xs mono muted-text">
+      <div>
+        <span class="font-semibold" style="color: var(--fg);">MONOFLOW STUDIO v1.0</span>
+        <span class="ml-2">• Local-First Storage + JSON Backup</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <button id="exportJsonBackupBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">
+          Export Backup (.JSON)
+        </button>
+        <label for="importJsonFileInput" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm cursor-pointer">
+          Restore Backup (.JSON)
+        </label>
+        <input id="importJsonFileInput" type="file" accept=".json,application/json" class="hidden" />
+        <button id="resetFactoryDefaultsBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">
+          Reset Demo Data
+        </button>
+      </div>
+    </footer>
+
+    <!-- STEP 4: QUICK COMMAND PALETTE MODAL (Ctrl+K or /) -->
+    <div id="cmdPaletteModal" class="hidden fixed inset-0 z-50 flex items-start justify-center pt-16 px-4" style="background-color: rgba(10, 10, 10, 0.65);">
+      <div class="mono-card w-full max-w-lg rounded-sm p-5 shadow-2xl">
+        <div class="flex items-center justify-between pb-3 border-b divider">
+          <div class="flex items-center gap-2">
+            <span class="mono text-xs font-semibold">QUICK COMMAND BAR</span>
+            <span class="mono text-[10px] px-1.5 py-0.5 mono-subtle rounded-sm">Ctrl+K</span>
+          </div>
+          <button id="closeCmdPaletteBtn" type="button" class="text-xs mono muted-text hover:underline">ESC // Close</button>
+        </div>
+
+        <form id="cmdPaletteForm" class="mt-3 flex gap-2">
+          <input
+            id="cmdPaletteInput"
+            type="text"
+            placeholder="Type command (e.g., spend 150 Food Matcha, habit Meditate 10m, theme, timer)..."
+            class="mono-input flex-1 px-3 py-2 text-xs mono rounded-sm"
+            autocomplete="off"
+          />
+          <button type="submit" class="mono-btn-primary px-4 py-2 text-xs mono rounded-sm">RUN</button>
+        </form>
+
+        <div class="mt-3">
+          <p class="text-[10px] mono uppercase tracking-wider muted-text mb-2">One-Click Quick Actions:</p>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" data-cmd="theme" class="cmdQuickBtn mono-btn-outline px-2.5 py-1 text-[11px] mono rounded-sm">Invert Theme (B&amp;W)</button>
+            <button type="button" data-cmd="timer" class="cmdQuickBtn mono-btn-outline px-2.5 py-1 text-[11px] mono rounded-sm">Start/Pause 25m Timer</button>
+            <button type="button" data-cmd="spend 120 Food Espresso" class="cmdQuickBtn mono-btn-outline px-2.5 py-1 text-[11px] mono rounded-sm">+ Log ₹120 Espresso</button>
+            <button type="button" data-cmd="habit Evening Journal (10m)" class="cmdQuickBtn mono-btn-outline px-2.5 py-1 text-[11px] mono rounded-sm">+ Add Evening Journal</button>
+            <button type="button" data-cmd="hub" class="cmdQuickBtn mono-btn-outline px-2.5 py-1 text-[11px] mono rounded-sm">Switch Dashboard / Hub</button>
+            <button type="button" data-cmd="backup" class="cmdQuickBtn mono-btn-outline px-2.5 py-1 text-[11px] mono rounded-sm">Download .JSON Backup</button>
+          </div>
+        </div>
+
+        <p class="mt-3 pt-2 border-t divider text-[11px] mono muted-text">
+          Syntax: <strong>spend [amount] [Category] [Title]</strong> • <strong>habit [Name]</strong> • <strong>cap [Amount]</strong> • <strong>theme</strong>
+        </p>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // --- STATE MANAGEMENT ---
+    const defaultState = {
+      darkMode: false,
+      activeTab: 'dashboard',
+      spotifyPlaying: false,
+      spotifyTrackIndex: 0,
+      dailyBudgetCap: 600,
+      monthlyIncome: 25000,
+      launchSteps: [
+        { id: 'ls1', title: 'Download standalone index.html & manifest.json', done: false },
+        { id: 'ls2', title: 'Drag & drop folder onto Netlify Drop or GitHub Pages', done: false },
+        { id: 'ls3', title: 'Open live URL on phone & tap "Add to Home Screen"', done: false },
+        { id: 'ls4', title: 'Export first weekly backup (.JSON) & Google Keep note', done: false }
+      ],
+      weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      dailySpendHistory: [320, 480, 290, 510, 390, 440, 420],
+      habits: [
+        { id: 'h1', name: 'Morning Deep Work (60m)', streak: 6, completedToday: true },
+        { id: 'h2', name: 'Zero Impulse Spending', streak: 4, completedToday: false },
+        { id: 'h3', name: 'Read 15 Pages', streak: 9, completedToday: true },
+        { id: 'h4', name: 'Evening Mobility & Stretch', streak: 3, completedToday: false }
+      ],
+      expenses: [
+        { id: 'e1', title: 'Specialty Pour-Over Coffee', amount: 180, category: 'Food', date: 'Today' },
+        { id: 'e2', title: 'Cloud Storage & Notes Sync', amount: 240, category: 'Study & Tech', date: 'Today' },
+        { id: 'e3', title: 'Metro & Campus Shuttle', amount: 90, category: 'Transport', date: 'Yesterday' },
+        { id: 'e4', title: 'Minimalist Grid Notebook', amount: 350, category: 'Lifestyle', date: 'Yesterday' }
+      ],
+      services: [
+        { id: 'gtasks', name: 'Google Tasks', tag: 'Google', connected: true, status: 'Mirrors uncompleted daily habits' },
+        { id: 'gcal', name: 'Google Calendar', tag: 'Google', connected: true, status: 'Blocks 07:00 AM habit ritual window' },
+        { id: 'gkeep', name: 'Google Keep & Notes', tag: 'Google', connected: true, status: 'Quick-captures receipt & habit notes' },
+        { id: 'gemini', name: 'Google Gemini', tag: 'AI', connected: true, status: 'Synthesizes weekly streak & budget tips' },
+        { id: 'notion', name: 'Notion Workspace', tag: 'Docs', connected: false, status: 'Exports ledger & streak table to database' },
+        { id: 'slack', name: 'Slack Status', tag: 'Team', connected: false, status: 'Posts daily accountability check-in' },
+        { id: 'spotify', name: 'Spotify Focus', tag: 'Audio', connected: false, status: 'Pairs focus playlist with habit sessions' }
+      ]
+    };
+
+    const spotifyTracks = [
+      'Deep Work Minimalist Piano // 01',
+      'Monochrome Lo-Fi Study Tape // 02',
+      'Analog Synth Concentration // 03',
+      'White Noise & Rain Architecture // 04'
+    ];
+
+    let state = loadState();
+    let streakChart = null;
+    let expenseChart = null;
+    let correlationChart = null;
+    let projectionChart = null;
+    let audioCtx = null;
+    let synthOsc1 = null;
+    let synthOsc2 = null;
+    let synthGain = null;
+    let synthMuted = false;
+    let visualizerTimer = null;
+    let pomodoroSeconds = 25 * 60;
+    let pomodoroIsBreak = false;
+    let pomodoroRunning = false;
+    let pomodoroTimerId = null;
+
+    const synthPresets = [
+      { desc: 'Warm Harmonic Drone • 110 Hz + 220 Hz', f1: 110, f2: 220, type1: 'sine', type2: 'triangle' },
+      { desc: 'Lo-Fi Study Fifth • 130.8 Hz + 196 Hz', f1: 130.81, f2: 196.00, type1: 'sine', type2: 'sine' },
+      { desc: 'Analog Binaural Focus • 144 Hz + 152 Hz', f1: 144, f2: 152, type1: 'sine', type2: 'sine' },
+      { desc: 'Deep Theta Architecture • 98 Hz + 147 Hz', f1: 98, f2: 147, type1: 'triangle', type2: 'sine' }
+    ];
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem('monoflow_step1_state');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          const merged = { ...defaultState, ...parsed };
+          merged.habits = (merged.habits || defaultState.habits).map((h, idx) => ({
+            ...h,
+            week: Array.isArray(h.week) && h.week.length === 7
+              ? h.week
+              : [true, idx % 2 === 0, true, true, idx !== 1, true, !!h.completedToday]
+          }));
+          return merged;
+        }
+      } catch (err) {
+        // Ignore storage errors in sandboxed iframes
+      }
+      const fresh = JSON.parse(JSON.stringify(defaultState));
+      fresh.habits = fresh.habits.map((h, idx) => ({
+        ...h,
+        week: [true, idx % 2 === 0, true, true, idx !== 1, true, !!h.completedToday]
+      }));
+      return fresh;
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem('monoflow_step1_state', JSON.stringify(state));
+      } catch (err) {
+        // Ignore storage errors in sandboxed iframes
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('statusToast');
+      const text = document.getElementById('statusToastText');
+      text.textContent = message;
+      toast.classList.remove('hidden');
+    }
+
+    // --- THEME CONTROL ---
+    function applyTheme() {
+      const root = document.documentElement;
+      const label = document.getElementById('themeLabel');
+      if (state.darkMode) {
+        root.classList.add('dark');
+        label.textContent = 'DARK // W&B';
+      } else {
+        root.classList.remove('dark');
+        label.textContent = 'LIGHT // B&W';
+      }
+      renderCharts();
+      renderCorrelationChart();
+      renderProjectionChart();
+    }
+
+    // --- VIEW NAVIGATION ---
+    function applyTab() {
+      const dashboardView = document.getElementById('dashboardView');
+      const integrationsView = document.getElementById('integrationsView');
+      const scorecardView = document.getElementById('scorecardView');
+      const launchView = document.getElementById('launchView');
+      const tabAllBtn = document.getElementById('tabAllBtn');
+      const tabIntegrationsBtn = document.getElementById('tabIntegrationsBtn');
+      const tabScorecardBtn = document.getElementById('tabScorecardBtn');
+      const tabLaunchBtn = document.getElementById('tabLaunchBtn');
+
+      dashboardView.classList.add('hidden');
+      integrationsView.classList.add('hidden');
+      if (scorecardView) scorecardView.classList.add('hidden');
+      if (launchView) launchView.classList.add('hidden');
+
+      tabAllBtn.className = 'px-2.5 py-1 rounded-sm';
+      tabIntegrationsBtn.className = 'px-2.5 py-1 rounded-sm';
+      if (tabScorecardBtn) tabScorecardBtn.className = 'px-2.5 py-1 rounded-sm';
+      if (tabLaunchBtn) tabLaunchBtn.className = 'px-2.5 py-1 rounded-sm';
+
+      if (state.activeTab === 'integrations') {
+        integrationsView.classList.remove('hidden');
+        tabIntegrationsBtn.className = 'px-2.5 py-1 rounded-sm mono-btn-primary';
+      } else if (state.activeTab === 'scorecard' && scorecardView) {
+        scorecardView.classList.remove('hidden');
+        if (tabScorecardBtn) tabScorecardBtn.className = 'px-2.5 py-1 rounded-sm mono-btn-primary';
+        renderScorecardAndSync();
+      } else if (state.activeTab === 'launch' && launchView) {
+        launchView.classList.remove('hidden');
+        if (tabLaunchBtn) tabLaunchBtn.className = 'px-2.5 py-1 rounded-sm mono-btn-primary';
+        renderLaunchCenter();
+      } else {
+        dashboardView.classList.remove('hidden');
+        tabAllBtn.className = 'px-2.5 py-1 rounded-sm mono-btn-primary';
+        renderCharts();
+      }
+    }
+
+    // --- RENDER HABITS ---
+    function renderHabits() {
+      const listEl = document.getElementById('habitList');
+      listEl.innerHTML = '';
+
+      if (state.habits.length === 0) {
+        listEl.innerHTML = '<p class="py-6 text-center text-xs muted-text mono">No habits yet. Add your first daily ritual above.</p>';
+      } else {
+        state.habits.forEach((habit) => {
+          const row = document.createElement('div');
+          row.className = 'py-3 flex items-center justify-between gap-3';
+
+          const left = document.createElement('div');
+          left.className = 'flex items-center gap-3 min-w-0';
+
+          const toggleBtn = document.createElement('button');
+          toggleBtn.type = 'button';
+          toggleBtn.className = habit.completedToday
+            ? 'w-5 h-5 rounded-sm mono-btn-primary flex items-center justify-center text-xs mono shrink-0'
+            : 'w-5 h-5 rounded-sm mono-btn-outline flex items-center justify-center text-xs mono shrink-0';
+          toggleBtn.textContent = habit.completedToday ? '✓' : '';
+          toggleBtn.setAttribute('aria-label', 'Toggle habit ' + habit.name);
+          toggleBtn.addEventListener('click', () => {
+            habit.completedToday = !habit.completedToday;
+            habit.streak = habit.completedToday ? habit.streak + 1 : Math.max(0, habit.streak - 1);
+            saveState();
+            renderAll();
+          });
+
+          const titleSpan = document.createElement('span');
+          titleSpan.className = 'text-xs font-medium truncate ' + (habit.completedToday ? 'line-through muted-text' : '');
+          titleSpan.textContent = habit.name;
+
+          left.appendChild(toggleBtn);
+          left.appendChild(titleSpan);
+
+          const right = document.createElement('div');
+          right.className = 'flex items-center gap-2 shrink-0';
+
+          const catBadge = document.createElement('span');
+          catBadge.className = 'mono text-[10px] px-1.5 py-0.5 rounded-sm mono-subtle muted-text';
+          catBadge.textContent = habit.category || 'Focus';
+
+          const streakBadge = document.createElement('span');
+          streakBadge.className = 'mono text-[11px] px-2 py-0.5 rounded-sm mono-subtle';
+          streakBadge.textContent = habit.streak + 'd streak';
+
+          right.appendChild(catBadge);
+
+          const delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'text-xs muted-text hover:underline mono px-1';
+          delBtn.textContent = '×';
+          delBtn.setAttribute('aria-label', 'Delete habit ' + habit.name);
+          delBtn.addEventListener('click', () => {
+            state.habits = state.habits.filter((h) => h.id !== habit.id);
+            saveState();
+            renderAll();
+          });
+
+          right.appendChild(streakBadge);
+          right.appendChild(delBtn);
+
+          row.appendChild(left);
+          row.appendChild(right);
+          listEl.appendChild(row);
+        });
+      }
+
+      document.getElementById('habitSummaryFooter').textContent = state.habits.length + ' active rituals';
+    }
+
+    // --- RENDER EXPENSES ---
+    function renderExpenses() {
+      const listEl = document.getElementById('expenseList');
+      const filterVal = document.getElementById('expenseFilterSelect').value;
+      listEl.innerHTML = '';
+
+      const filtered = filterVal === 'ALL'
+        ? state.expenses
+        : state.expenses.filter((e) => e.category === filterVal);
+
+      let filteredSum = 0;
+      filtered.forEach((e) => { filteredSum += Number(e.amount) || 0; });
+      document.getElementById('filteredExpenseTotal').textContent = '₹' + filteredSum.toLocaleString('en-IN');
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = '<p class="py-6 text-center text-xs muted-text mono">No expenses in this category.</p>';
+        return;
+      }
+
+      filtered.forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'py-2.5 flex items-center justify-between gap-3';
+
+        const left = document.createElement('div');
+        left.className = 'min-w-0';
+        const title = document.createElement('p');
+        title.className = 'text-xs font-medium truncate';
+        title.textContent = item.title;
+
+        const meta = document.createElement('p');
+        meta.className = 'text-[10px] muted-text mono';
+        meta.textContent = item.category + ' • ' + item.date;
+
+        left.appendChild(title);
+        left.appendChild(meta);
+
+        const right = document.createElement('div');
+        right.className = 'flex items-center gap-3 shrink-0';
+
+        const amt = document.createElement('span');
+        amt.className = 'text-xs font-semibold mono';
+        amt.textContent = '₹' + Number(item.amount).toLocaleString('en-IN');
+
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'text-xs muted-text hover:underline mono px-1';
+        delBtn.textContent = '×';
+        delBtn.setAttribute('aria-label', 'Delete expense ' + item.title);
+        delBtn.addEventListener('click', () => {
+          state.expenses = state.expenses.filter((e) => e.id !== item.id);
+          saveState();
+          renderAll();
+        });
+
+        right.appendChild(amt);
+        right.appendChild(delBtn);
+
+        row.appendChild(left);
+        row.appendChild(right);
+        listEl.appendChild(row);
+      });
+    }
+
+    // --- RENDER KPI STRIP ---
+    function renderKPIs() {
+      const totalHabits = state.habits.length;
+      const doneHabits = state.habits.filter((h) => h.completedToday).length;
+      const pct = totalHabits > 0 ? Math.round((doneHabits / totalHabits) * 100) : 0;
+
+      document.getElementById('kpiHabitCompletion').textContent = doneHabits + '/' + totalHabits;
+      document.getElementById('kpiHabitPercent').textContent = pct + '%';
+
+      const bestStreak = state.habits.reduce((max, h) => Math.max(max, h.streak), 0);
+      document.getElementById('kpiBestStreak').textContent = bestStreak + 'd';
+
+      const totalSpent = state.expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      document.getElementById('kpiTotalSpent').textContent = '₹' + totalSpent.toLocaleString('en-IN');
+      document.getElementById('kpiExpenseCount').textContent = state.expenses.length + ' items';
+
+      const connectedCount = state.services.filter((s) => s.connected).length;
+      document.getElementById('kpiConnectedCount').textContent = connectedCount + '/' + state.services.length;
+    }
+
+    // --- RENDER CHARTS (MINIMALIST MONOCHROME) ---
+    function renderCharts() {
+      const fgColor = state.darkMode ? '#f5f5f5' : '#0a0a0a';
+      const mutedColor = state.darkMode ? '#737373' : '#737373';
+      const gridColor = state.darkMode ? '#222222' : '#ebebeb';
+
+      // 1. Streak Chart
+      const streakCtx = document.getElementById('streakChartCanvas').getContext('2d');
+      if (streakChart) {
+        streakChart.destroy();
+      }
+      streakChart = new Chart(streakCtx, {
+        type: 'bar',
+        data: {
+          labels: state.habits.map((h) => h.name.length > 16 ? h.name.slice(0, 16) + '…' : h.name),
+          datasets: [{
+            label: 'Streak (Days)',
+            data: state.habits.map((h) => h.streak),
+            backgroundColor: fgColor,
+            borderColor: fgColor,
+            borderWidth: 1,
+            borderRadius: 2,
+            barThickness: 22
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 } },
+              grid: { display: false }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: { color: mutedColor, stepSize: 2, font: { family: 'JetBrains Mono', size: 10 } },
+              grid: { color: gridColor }
+            }
+          }
+        }
+      });
+
+      // 2. Expense Category Chart
+      const categories = ['Food', 'Study & Tech', 'Transport', 'Lifestyle'];
+      const categoryTotals = categories.map((cat) =>
+        state.expenses
+          .filter((e) => e.category === cat)
+          .reduce((sum, e) => sum + (Number(e.amount) || 0), 0)
+      );
+
+      const expenseCtx = document.getElementById('expenseChartCanvas').getContext('2d');
+      if (expenseChart) {
+        expenseChart.destroy();
+      }
+      expenseChart = new Chart(expenseCtx, {
+        type: 'bar',
+        data: {
+          labels: categories,
+          datasets: [{
+            label: 'Spent (₹)',
+            data: categoryTotals,
+            backgroundColor: state.darkMode
+              ? ['#f5f5f5', '#b3b3b3', '#737373', '#404040']
+              : ['#0a0a0a', '#404040', '#8c8c8c', '#cccccc'],
+            borderColor: fgColor,
+            borderWidth: 1,
+            borderRadius: 2,
+            barThickness: 26
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            x: {
+              beginAtZero: true,
+              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 } },
+              grid: { color: gridColor }
+            },
+            y: {
+              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 } },
+              grid: { display: false }
+            }
+          }
+        }
+      });  renderCorrelationChart();
+    }
+
+    // --- RENDER ECOSYSTEM HUB ---
+    function renderServices() {
+      const grid = document.getElementById('servicesGrid');
+      grid.innerHTML = '';
+
+      state.services.forEach((svc) => {
+        const card = document.createElement('div');
+        card.className = 'mono-card p-4 rounded-sm flex flex-col justify-between gap-3';
+
+        const top = document.createElement('div');
+        top.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="mono text-[10px] px-1.5 py-0.5 rounded-sm mono-subtle">${svc.tag}</span>
+            <span class="mono text-[10px] ${svc.connected ? 'font-semibold' : 'muted-text'}">
+              ${svc.connected ? '● ONLINE' : '○ STANDBY'}
+            </span>
+          </div>
+          <h4 class="text-sm font-semibold mt-2">${svc.name}</h4>
+          <p class="text-xs muted-text mt-1">${svc.status}</p>
+        `;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = svc.connected
+          ? 'mono-btn-primary w-full py-1.5 text-xs mono rounded-sm'
+          : 'mono-btn-outline w-full py-1.5 text-xs mono rounded-sm';
+        btn.textContent = svc.connected ? 'CONNECTED (TOGGLE)' : 'CONNECT NODE';
+        btn.addEventListener('click', () => {
+          svc.connected = !svc.connected;
+          saveState();
+          renderAll();
+          showToast(svc.name + (svc.connected ? ' connected to MONOFLOW.' : ' set to standby.'));
+        });
+
+        card.appendChild(top);
+        card.appendChild(btn);
+        grid.appendChild(card);
+      });
+    }
+
+    // --- STEP 2: RENDER DAILY BUDGET GUARDRAIL ---
+    function renderBudgetGuardrail() {
+      const cap = Number(state.dailyBudgetCap) || 600;
+      const todaySpent = state.expenses
+        .filter((e) => e.date === 'Today')
+        .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+
+      const pct = Math.min(100, Math.round((todaySpent / cap) * 100));
+      const bar = document.getElementById('budgetProgressBar');
+      const badge = document.getElementById('budgetStatusBadge');
+      const todayLabel = document.getElementById('todaySpendLabel');
+      const capLabel = document.getElementById('dailyCapLabel');
+      const capInput = document.getElementById('dailyCapInput');
+
+      if (bar) bar.style.width = pct + '%';
+      if (todayLabel) todayLabel.textContent = '₹' + todaySpent.toLocaleString('en-IN');
+      if (capLabel) capLabel.textContent = '₹' + cap.toLocaleString('en-IN');
+      if (capInput && document.activeElement !== capInput) capInput.value = cap;
+
+      if (badge) {
+        if (todaySpent <= cap) {
+          badge.textContent = 'UNDER CAP (' + pct + '%) // STREAK SAFE';
+        } else {
+          badge.textContent = 'OVER CAP (' + pct + '%) // REVIEW SPEND';
+        }
+      }
+    }
+
+    // --- STEP 2: RENDER 7-DAY STREAK MATRIX ---
+    function renderStreakMatrix() {
+      const container = document.getElementById('streakMatrixContainer');
+      const scoreBadge = document.getElementById('weeklyMatrixScore');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const days = state.weekDays || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      let totalCells = 0;
+      let completedCells = 0;
+
+      // Header row
+      const headerRow = document.createElement('div');
+      headerRow.className = 'grid grid-cols-12 items-center gap-2 text-[10px] mono muted-text pb-1';
+      const labelCol = document.createElement('div');
+      labelCol.className = 'col-span-5 truncate uppercase';
+      labelCol.textContent = 'Habit Ritual';
+      headerRow.appendChild(labelCol);
+
+      const daysGrid = document.createElement('div');
+      daysGrid.className = 'col-span-7 grid grid-cols-7 gap-1 text-center';
+      days.forEach((d) => {
+        const span = document.createElement('span');
+        span.textContent = d.slice(0, 1);
+        daysGrid.appendChild(span);
+      });
+      headerRow.appendChild(daysGrid);
+      container.appendChild(headerRow);
+
+      state.habits.forEach((habit) => {
+        if (!Array.isArray(habit.week) || habit.week.length !== 7) {
+          habit.week = [true, true, false, true, true, true, !!habit.completedToday];
+        }
+        habit.week[6] = !!habit.completedToday;
+
+        const row = document.createElement('div');
+        row.className = 'grid grid-cols-12 items-center gap-2 py-1';
+
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'col-span-5 text-xs truncate font-medium';
+        nameDiv.textContent = habit.name;
+        row.appendChild(nameDiv);
+
+        const cellsWrap = document.createElement('div');
+        cellsWrap.className = 'col-span-7 grid grid-cols-7 gap-1';
+
+        habit.week.forEach((done, dayIndex) => {
+          totalCells += 1;
+          if (done) completedCells += 1;
+
+          const cellBtn = document.createElement('button');
+          cellBtn.type = 'button';
+          cellBtn.className = done
+            ? 'h-6 rounded-sm mono-btn-primary text-[10px] mono flex items-center justify-center'
+            : 'h-6 rounded-sm mono-btn-outline text-[10px] mono flex items-center justify-center';
+          cellBtn.textContent = done ? '■' : '·';
+          cellBtn.setAttribute('aria-label', habit.name + ' ' + days[dayIndex]);
+          cellBtn.addEventListener('click', () => {
+            habit.week[dayIndex] = !habit.week[dayIndex];
+            if (dayIndex === 6) {
+              habit.completedToday = habit.week[6];
+            }
+            habit.streak = habit.week.filter(Boolean).length;
+            saveState();
+            renderAll();
+          });
+          cellsWrap.appendChild(cellBtn);
+        });
+
+        row.appendChild(cellsWrap);
+        container.appendChild(row);
+      });
+
+      const weeklyPct = totalCells > 0 ? Math.round((completedCells / totalCells) * 100) : 0;
+      if (scoreBadge) {
+        scoreBadge.textContent = weeklyPct + '% Weekly';
+      }
+    }
+
+    // --- STEP 2: RENDER CORRELATION CHART ---
+    function renderCorrelationChart() {
+      const canvas = document.getElementById('correlationChartCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const fgColor = state.darkMode ? '#f5f5f5' : '#0a0a0a';
+      const mutedColor = state.darkMode ? '#8c8c8c' : '#737373';
+      const gridColor = state.darkMode ? '#222222' : '#ebebeb';
+
+      const days = state.weekDays || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const dailyCompletionPct = days.map((_, dayIdx) => {
+        if (state.habits.length === 0) return 0;
+        const doneCount = state.habits.filter((h) => Array.isArray(h.week) && h.week[dayIdx]).length;
+        return Math.round((doneCount / state.habits.length) * 100);
+      });
+
+      const todaySpend = state.expenses
+        .filter((e) => e.date === 'Today')
+        .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      const spendSeries = [...(state.dailySpendHistory || [320, 480, 290, 510, 390, 440, 420])];
+      spendSeries[6] = todaySpend;
+
+      if (correlationChart) {
+        correlationChart.destroy();
+      }
+
+      correlationChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: days,
+          datasets: [
+            {
+              type: 'line',
+              label: 'Habit Completion (%)',
+              data: dailyCompletionPct,
+              borderColor: fgColor,
+              backgroundColor: fgColor,
+              borderWidth: 2,
+              tension: 0.25,
+              pointRadius: 3,
+              yAxisID: 'yPct'
+            },
+            {
+              type: 'bar',
+              label: 'Daily Spend (₹)',
+              data: spendSeries,
+              backgroundColor: state.darkMode ? '#404040' : '#d4d4d4',
+              borderColor: fgColor,
+              borderWidth: 1,
+              borderRadius: 2,
+              barThickness: 18,
+              yAxisID: 'ySpend'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              labels: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 }, boxWidth: 12 }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 } },
+              grid: { display: false }
+            },
+            yPct: {
+              type: 'linear',
+              position: 'left',
+              min: 0,
+              max: 100,
+              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => v + '%' },
+              grid: { color: gridColor }
+            },
+            ySpend: {
+              type: 'linear',
+              position: 'right',
+              beginAtZero: true,
+              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => '₹' + v },
+              grid: { display: false }
+            }
+          }
+        }
+      });
+    }
+
+    // --- STEP 3: GEMINI COACH ENGINE ---
+    function buildGeminiResponse(mode, customQuestion) {
+      const done = state.habits.filter((h) => h.completedToday).length;
+      const total = state.habits.length;
+      const cap = Number(state.dailyBudgetCap) || 600;
+      const todaySpent = state.expenses
+        .filter((e) => e.date === 'Today')
+        .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      const totalSpent = state.expenses.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+      const topHabit = state.habits.reduce((best, h) => (!best || h.streak > best.streak ? h : best), null);
+      const pendingHabits = state.habits.filter((h) => !h.completedToday).map((h) => h.name);
+
+      if (customQuestion && customQuestion.trim()) {
+        return `GEMINI Q&A // "${customQuestion.trim()}" -> Based on your ${done}/${total} habits done today and ₹${todaySpent} spent against your ₹${cap} cap: focus on completing "${pendingHabits[0] || 'your evening review'}" first, and keep discretionary spending under ₹${Math.max(0, cap - todaySpent)} for the rest of today.`;
+      }
+
+      if (mode === 'rescue') {
+        if (pendingHabits.length === 0) {
+          return `STREAK RESCUE // All ${total} habits are complete today! Your top streak is "${topHabit ? topHabit.name : 'N/A'}" (${topHabit ? topHabit.streak : 0}d). Lock in tomorrow's 07:00 AM block now.`;
+        }
+        return `STREAK RESCUE // You have ${pendingHabits.length} uncompleted ritual(s) today: ${pendingHabits.join(', ')}. Do a 2-minute micro-version of "${pendingHabits[0]}" right now to protect your streak momentum.`;
+      }
+
+      if (mode === 'audit') {
+        const byCat = {};
+        state.expenses.forEach((e) => {
+          byCat[e.category] = (byCat[e.category] || 0) + (Number(e.amount) || 0);
+        });
+        let topCat = 'None';
+        let topVal = 0;
+        Object.keys(byCat).forEach((k) => {
+          if (byCat[k] > topVal) {
+            topVal = byCat[k];
+            topCat = k;
+          }
+        });
+        const share = totalSpent > 0 ? Math.round((topVal / totalSpent) * 100) : 0;
+        return `80/20 EXPENSE AUDIT // Total logged: ₹${totalSpent.toLocaleString('en-IN')}. Highest category is "${topCat}" at ₹${topVal.toLocaleString('en-IN')} (${share}% of spend). Trimming 20% from ${topCat} saves ₹${Math.round(topVal * 0.2)} this cycle.`;
+      }
+
+      if (mode === 'stack') {
+        const anchor = topHabit ? topHabit.name : 'Morning Deep Work';
+        const target = pendingHabits[0] || 'Zero Impulse Spending';
+        return `HABIT STACKING // Pair your strongest ritual ("${anchor}", ${topHabit ? topHabit.streak : 1}d streak) with "${target}". Rule: Immediately after finishing "${anchor}", spend 60 seconds logging or reviewing "${target}".`;
+      }
+
+      return `GEMINI DIGEST // You've completed ${done}/${total} habits today (top streak: ${topHabit ? topHabit.name + ' at ' + topHabit.streak + 'd' : 'none'}). Today's spend is ₹${todaySpent.toLocaleString('en-IN')} / ₹${cap} cap (Total: ₹${totalSpent.toLocaleString('en-IN')}).`;
+    }
+
+    // --- STEP 3: NOTION & SLACK LIVE PREVIEWS ---
+    function renderNotionAndSlackPreviews() {
+      const notionPre = document.getElementById('notionMarkdownPreview');
+      const slackPre = document.getElementById('slackMessagePreview');
+      const channelSelect = document.getElementById('slackChannelSelect');
+
+      if (notionPre) {
+        const rows = [
+          '| Type | Item / Ritual | Metric / Amount | Status / Category |',
+          '| :--- | :--- | :--- | :--- |',
+          ...state.habits.map((h) => `| Habit | ${h.name} | ${h.streak}d streak | ${h.completedToday ? 'Completed' : 'Pending'} |`),
+          ...state.expenses.map((e) => `| Expense | ${e.title} | ₹${e.amount} | ${e.category} (${e.date}) |`)
+        ];
+        notionPre.textContent = rows.join('\n');
+      }
+
+      if (slackPre) {
+        const channel = channelSelect ? channelSelect.value : '#daily-rituals';
+        const done = state.habits.filter((h) => h.completedToday).length;
+        const todaySpent = state.expenses
+          .filter((e) => e.date === 'Today')
+          .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+        const track = spotifyTracks[state.spotifyTrackIndex] || spotifyTracks[0];
+
+        const msg = [
+          `*MONOFLOW DAILY CHECK-IN* • \`${channel}\``,
+          `• *Rituals:* ${done}/${state.habits.length} completed today`,
+          ...state.habits.map((h) => `   ${h.completedToday ? '▪' : '▫'} ${h.name} (\`${h.streak}d\`)`),
+          `• *Budget Guardrail:* ₹${todaySpent} spent today / ₹${state.dailyBudgetCap} cap`,
+          `• *Focus Stream:* _${track}_`
+        ];
+        slackPre.textContent = msg.join('\n');
+      }
+    }
+
+    // --- STEP 3: WEB AUDIO AMBIENT FOCUS SYNTH ---
+    function updateSynthAudio() {
+      const preset = synthPresets[state.spotifyTrackIndex % synthPresets.length];
+      const descEl = document.getElementById('spotifySynthDesc');
+      if (descEl) descEl.textContent = preset.desc;
+
+      if (!state.spotifyPlaying) {
+        if (synthGain && audioCtx) {
+          synthGain.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.08);
+        }
+        stopVisualizer();
+        return;
+      }
+
+      try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        if (!audioCtx) {
+          audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        if (!synthOsc1) {
+          synthOsc1 = audioCtx.createOscillator();
+          synthOsc2 = audioCtx.createOscillator();
+          synthGain = audioCtx.createGain();
+          synthGain.gain.value = 0.0001;
+          synthOsc1.connect(synthGain);
+          synthOsc2.connect(synthGain);
+          synthGain.connect(audioCtx.destination);
+          synthOsc1.start();
+          synthOsc2.start();
+        }
+
+        synthOsc1.type = preset.type1;
+        synthOsc2.type = preset.type2;
+        synthOsc1.frequency.setTargetAtTime(preset.f1, audioCtx.currentTime, 0.05);
+        synthOsc2.frequency.setTargetAtTime(preset.f2, audioCtx.currentTime, 0.05);
+
+        const slider = document.getElementById('spotifyVolumeSlider');
+        const volPct = slider ? Number(slider.value) : 35;
+        const targetGain = synthMuted ? 0.0001 : Math.max(0.0001, (volPct / 100) * 0.12);
+        synthGain.gain.setTargetAtTime(targetGain, audioCtx.currentTime, 0.08);
+        startVisualizer();
+      } catch (err) {
+        // Ignore Web Audio blocks if no user gesture yet
+      }
+    }
+
+    function startVisualizer() {
+      if (visualizerTimer) clearInterval(visualizerTimer);
+      const bars = document.querySelectorAll('#focusVisualizerBar .synth-bar');
+      visualizerTimer = setInterval(() => {
+        bars.forEach((bar, i) => {
+          const h = state.spotifyPlaying && !synthMuted
+            ? Math.floor(20 + Math.random() * 75)
+            : 15 + ((i * 7) % 20);
+          bar.style.height = h + '%';
+        });
+      }, 180);
+    }
+
+    function stopVisualizer() {
+      if (visualizerTimer) {
+        clearInterval(visualizerTimer);
+        visualizerTimer = null;
+      }
+      const bars = document.querySelectorAll('#focusVisualizerBar .synth-bar');
+      bars.forEach((bar, i) => {
+        bar.style.height = (18 + ((i * 9) % 25)) + '%';
+      });
+    }
+
+    // --- STEP 4: POMODORO FOCUS TIMER & COMMAND EXECUTION ---
+    function formatPomodoroTime(totalSec) {
+      const m = Math.floor(totalSec / 60);
+      const s = totalSec % 60;
+      return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }
+
+    function renderPomodoroSelect() {
+      const sel = document.getElementById('pomodoroHabitSelect');
+      if (!sel) return;
+      const currentVal = sel.value;
+      sel.innerHTML = '';
+      if (state.habits.length === 0) {
+        const opt = document.createElement('option');
+        opt.value = '';
+        opt.textContent = 'No active habits';
+        sel.appendChild(opt);
+        return;
+      }
+      state.habits.forEach((h) => {
+        const opt = document.createElement('option');
+        opt.value = h.id;
+        opt.textContent = h.name + (h.completedToday ? ' (✓ Done)' : ' (' + h.streak + 'd)');
+        sel.appendChild(opt);
+      });
+      if (currentVal && state.habits.some((h) => h.id === currentVal)) {
+        sel.value = currentVal;
+      }
+    }
+
+    function updatePomodoroUI() {
+      const display = document.getElementById('pomodoroTimeDisplay');
+      const badge = document.getElementById('pomodoroModeBadge');
+      const startBtn = document.getElementById('pomodoroStartPauseBtn');
+      if (display) display.textContent = formatPomodoroTime(pomodoroSeconds);
+      if (badge) {
+        badge.textContent = pomodoroIsBreak
+          ? (pomodoroRunning ? 'BREAK // RUNNING' : 'BREAK // 05M')
+          : (pomodoroRunning ? 'FOCUS // RUNNING' : 'FOCUS // 25M');
+      }
+      if (startBtn) {
+        startBtn.textContent = pomodoroRunning ? 'PAUSE TIMER' : 'START TIMER';
+      }
+    }
+
+    function togglePomodoroTimer() {
+      if (pomodoroRunning) {
+        pomodoroRunning = false;
+        if (pomodoroTimerId) {
+          clearInterval(pomodoroTimerId);
+          pomodoroTimerId = null;
+        }
+        const syncAudio = document.getElementById('pomodoroSyncAudioCheckbox');
+        if (syncAudio && syncAudio.checked && state.spotifyPlaying) {
+          state.spotifyPlaying = false;
+          document.getElementById('spotifyPlayPauseBtn').textContent = 'PLAY';
+          document.getElementById('spotifyStateBadge').textContent = 'PAUSED';
+          updateSynthAudio();
+        }
+        updatePomodoroUI();
+        return;
+      }
+
+      pomodoroRunning = true;
+      const syncAudio = document.getElementById('pomodoroSyncAudioCheckbox');
+      if (syncAudio && syncAudio.checked && !pomodoroIsBreak) {
+        state.spotifyPlaying = true;
+        document.getElementById('spotifyPlayPauseBtn').textContent = 'PAUSE';
+        document.getElementById('spotifyStateBadge').textContent = 'PLAYING';
+        updateSynthAudio();
+      }
+      updatePomodoroUI();
+
+      if (pomodoroTimerId) clearInterval(pomodoroTimerId);
+      pomodoroTimerId = setInterval(() => {
+        if (pomodoroSeconds > 0) {
+          pomodoroSeconds -= 1;
+          updatePomodoroUI();
+        } else {
+          clearInterval(pomodoroTimerId);
+          pomodoroTimerId = null;
+          pomodoroRunning = false;
+          completeSelectedPomodoroHabit();
+          updatePomodoroUI();
+        }
+      }, 1000);
+    }
+
+    function completeSelectedPomodoroHabit() {
+      const sel = document.getElementById('pomodoroHabitSelect');
+      const habitId = sel ? sel.value : '';
+      const target = state.habits.find((h) => h.id === habitId) || state.habits[0];
+      if (!target) {
+        showToast('Focus session complete!');
+        return;
+      }
+      if (!target.completedToday) {
+        target.completedToday = true;
+        target.streak += 1;
+        if (Array.isArray(target.week)) target.week[6] = true;
+        saveState();
+        renderAll();
+      }
+      showToast('Focus ritual completed! Checked off "' + target.name + '" (+1 streak).');
+    }
+
+    function triggerJsonBackupDownload() {
+      const payload = JSON.stringify(state, null, 2);
+      const blob = new Blob([payload], { type: 'application/json;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'monoflow_backup.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Exported full workspace backup to monoflow_backup.json.');
+    }
+
+    function executeQuickCommand(rawCmd) {
+      const cmd = (rawCmd || '').trim();
+      if (!cmd) return;
+      const lower = cmd.toLowerCase();
+
+      if (lower === 'theme' || lower === 'dark' || lower === 'light') {
+        state.darkMode = !state.darkMode;
+        saveState();
+        applyTheme();
+        showToast('Theme inverted via Command Bar.');
+        return;
+      }
+
+      if (lower === 'timer' || lower === 'focus' || lower === 'pomodoro') {
+        togglePomodoroTimer();
+        showToast(pomodoroRunning ? 'Focus timer started.' : 'Focus timer paused.');
+        return;
+      }
+
+      if (lower === 'hub' || lower === 'dashboard') {
+        state.activeTab = state.activeTab === 'dashboard' ? 'integrations' : 'dashboard';
+        saveState();
+        applyTab();
+        showToast('Switched view to ' + state.activeTab.toUpperCase() + '.');
+        return;
+      }
+
+      if (lower === 'backup' || lower === 'export') {
+        triggerJsonBackupDownload();
+        return;
+      }
+
+      if (lower.startsWith('cap ')) {
+        const amt = parseFloat(cmd.slice(4).trim());
+        if (!isNaN(amt) && amt >= 50) {
+          state.dailyBudgetCap = amt;
+          saveState();
+          renderAll();
+          showToast('Daily budget cap set to ₹' + amt + '.');
+        }
+        return;
+      }
+
+      if (lower.startsWith('habit ')) {
+        const habitName = cmd.slice(6).trim();
+        if (habitName) {
+          state.habits.unshift({
+            id: 'h_' + Date.now(),
+            name: habitName,
+            streak: 1,
+            completedToday: true,
+            week: [false, false, false, false, false, false, true]
+          });
+          saveState();
+          renderAll();
+          showToast('Added habit "' + habitName + '" via Command Bar.');
+        }
+        return;
+      }
+
+      if (lower.startsWith('spend ')) {
+        // Format: spend 150 Food Matcha Latte
+        const parts = cmd.slice(6).trim().split(/\s+/);
+        const amt = parseFloat(parts[0]);
+        if (!isNaN(amt) && amt > 0) {
+          const validCats = ['Food', 'Study & Tech', 'Transport', 'Lifestyle'];
+          let cat = 'Food';
+          let titleStartIdx = 1;
+          if (parts[1]) {
+            const matchedCat = validCats.find((c) => c.toLowerCase().startsWith(parts[1].toLowerCase()));
+            if (matchedCat) {
+              cat = matchedCat;
+              titleStartIdx = 2;
+            }
+          }
+          const title = parts.slice(titleStartIdx).join(' ') || ('Quick ' + cat + ' Expense');
+          state.expenses.unshift({
+            id: 'e_' + Date.now(),
+            title,
+            amount: amt,
+            category: cat,
+            date: 'Today'
+          });
+          saveState();
+          renderAll();
+          showToast('Logged ₹' + amt + ' for "' + title + '" (' + cat + ').');
+          return;
+        }
+      }
+
+      showToast('Unrecognized command. Try "spend 150 Food Coffee", "habit Read 10m", or "theme".');
+    }
+
+    // --- STEP 5: 30-DAY PROJECTION & SAVINGS FORECAST ---
+    function renderProjectionChart() {
+      const income = Number(state.monthlyIncome) || 25000;
+      const cap = Number(state.dailyBudgetCap) || 600;
+      const todaySpent = state.expenses
+        .filter((e) => e.date === 'Today')
+        .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      const avgDaily = Math.round(((420 * 6) + todaySpent) / 7);
+
+      const cap30 = cap * 30;
+      const projBurn30 = avgDaily * 30;
+      const projSavings = Math.max(0, income - projBurn30);
+      const savingsPct = income > 0 ? Math.round((projSavings / income) * 100) : 0;
+
+      const capEl = document.getElementById('projCapSpendLabel');
+      const burnEl = document.getElementById('projActualSpendLabel');
+      const savEl = document.getElementById('projMonthlySavingsLabel');
+      const rateEl = document.getElementById('projSavingsRateBadge');
+      const incInput = document.getElementById('monthlyIncomeInput');
+
+      if (capEl) capEl.textContent = '₹' + cap30.toLocaleString('en-IN');
+      if (burnEl) burnEl.textContent = '₹' + projBurn30.toLocaleString('en-IN');
+      if (savEl) savEl.textContent = '₹' + projSavings.toLocaleString('en-IN');
+      if (rateEl) rateEl.textContent = savingsPct + '% projected savings rate';
+      if (incInput && document.activeElement !== incInput) incInput.value = income;
+
+      const canvas = document.getElementById('projectionChartCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const fgColor = state.darkMode ? '#f5f5f5' : '#0a0a0a';
+      const mutedColor = state.darkMode ? '#8c8c8c' : '#737373';
+      const gridColor = state.darkMode ? '#222222' : '#ebebeb';
+
+      const milestones = ['Day 1', 'Day 5', 'Day 10', 'Day 15', 'Day 20', 'Day 25', 'Day 30'];
+      const dayNums = [1, 5, 10, 15, 20, 25, 30];
+      const capLine = dayNums.map((d) => d * cap);
+      const paceLine = dayNums.map((d) => d * avgDaily);
+
+      if (projectionChart) {
+        projectionChart.destroy();
+      }
+
+      projectionChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: milestones,
+          datasets: [
+            {
+              label: 'Projected Burn Pace (₹)',
+              data: paceLine,
+              borderColor: fgColor,
+              backgroundColor: fgColor,
+              borderWidth: 2,
+              tension: 0.2,
+              pointRadius: 3
+            },
+            {
+              label: '30-Day Cap Allowance (₹)',
+              data: capLine,
+              borderColor: mutedColor,
+              borderDash: [5, 5],
+              borderWidth: 1.5,
+              tension: 0.1,
+              pointRadius: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              labels: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 }, boxWidth: 12 }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 } },
+              grid: { display: false }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 10 }, callback: (v) => '₹' + v },
+              grid: { color: gridColor }
+            }
+          }
+        }
+      });
+    }
+
+    // --- STEP 5: MINIMALIST RECEIPT SCORECARD & CHAT COMMAND GENERATOR ---
+    function renderScorecardAndSync() {
+      const receiptEl = document.getElementById('monochromeReceiptPre');
+      const promptEl = document.getElementById('liveChatSyncPromptPre');
+
+      const doneCount = state.habits.filter((h) => h.completedToday).length;
+      const totalHabits = state.habits.length;
+      const todaySpent = state.expenses
+        .filter((e) => e.date === 'Today')
+        .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      const totalSpent = state.expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      const cap = Number(state.dailyBudgetCap) || 600;
+
+      if (receiptEl) {
+        const receiptLines = [
+          '==============================================',
+          '          MONOFLOW // WEEKLY SCORECARD        ',
+          '==============================================',
+          `STATUS      : ${doneCount}/${totalHabits} RITUALS DONE TODAY`,
+          `DAILY SPEND : ₹${todaySpent} / ₹${cap} CAP`,
+          `LEDGER SUM  : ₹${totalSpent} (${state.expenses.length} ITEMS)`,
+          '----------------------------------------------',
+          '01 // RITUAL STREAK LEDGER',
+          ...state.habits.map((h) => {
+            const box = h.completedToday ? '[x]' : '[ ]';
+            const tag = (h.category || 'Focus').toUpperCase();
+            return `  ${box} ${h.name.padEnd(24, ' ').slice(0, 24)} | ${String(h.streak).padStart(2, '0')}d | ${tag}`;
+          }),
+          '----------------------------------------------',
+          '02 // RECENT EXPENSE ALLOCATION',
+          ...state.expenses.slice(0, 6).map((e) => {
+            return `  • ${e.title.padEnd(24, ' ').slice(0, 24)} | ₹${String(e.amount).padStart(5, ' ')} | ${e.category}`;
+          }),
+          '==============================================',
+          '       END OF MONOCHROME DISPATCH // V1.0     ',
+          '=============================================='
+        ];
+        receiptEl.textContent = receiptLines.join('\n');
+      }
+
+      if (promptEl) {
+        const pendingNames = state.habits.filter((h) => !h.completedToday).map((h) => h.name);
+        const allNames = state.habits.map((h) => `${h.name} (${h.streak}d streak)`).join(', ');
+        const chatCmd = [
+          'Please sync my MONOFLOW workspace with my Google account:',
+          `1. Create a Google Keep note titled "MONOFLOW Snapshot" with my active streaks (${allNames}) and today's spend (₹${todaySpent} / ₹${cap} cap).`,
+          `2. Add my pending habits to Google Tasks: ${pendingNames.length > 0 ? pendingNames.join(', ') : 'Review evening ledger'}.`,
+          '3. Schedule a 45-minute "MONOFLOW Morning Ritual" block on my Google Calendar for tomorrow at 7:00 AM.'
+        ];
+        promptEl.textContent = chatCmd.join('\n');
+      }
+    }
+
+    // --- STEP 6: LAUNCH CHECKLIST & BEGINNER CODE X-RAY ---
+    const xraySnippets = {
+      theme: `/* 01. CSS Contrast Engine */
+:root {
+  --bg: #ffffff;
+  --fg: #0a0a0a;
+}
+html.dark {
+  --bg: #0a0a0a;
+  --fg: #f5f5f5;
+}
+/* Flipping 'dark' on <html> inverts every card & chart! */`,
+      state: `// 02. Local-First State Persistence
+function saveState() {
+  localStorage.setItem('monoflow_step1_state', JSON.stringify(state));
+}
+// Every habit toggle or expense log updates 'state' and re-renders.`,
+      charts: `// 03. Dynamic Monochrome Chart.js Sync
+const fgColor = state.darkMode ? '#f5f5f5' : '#0a0a0a';
+streakChart = new Chart(ctx, {
+  type: 'bar',
+  data: { labels: habits, datasets: [{ data: streaks, backgroundColor: fgColor }] }
+});`,
+      bridges: `// 04. Ecosystem Bridges & Web Audio API
+const calUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=MONOFLOW';
+const osc = audioCtx.createOscillator(); // Synthesizes live focus drone`
+    };
+
+    let activeXrayKey = 'theme';
+
+    function renderLaunchCenter() {
+      const container = document.getElementById('launchChecklistContainer');
+      const badge = document.getElementById('launchChecklistBadge');
+      const xrayPre = document.getElementById('xrayCodePreview');
+      if (!container) return;
+
+      if (!Array.isArray(state.launchSteps) || state.launchSteps.length === 0) {
+        state.launchSteps = JSON.parse(JSON.stringify(defaultState.launchSteps));
+      }
+
+      container.innerHTML = '';
+      const doneCount = state.launchSteps.filter((s) => s.done).length;
+      if (badge) badge.textContent = doneCount + '/' + state.launchSteps.length + ' Shipped';
+
+      state.launchSteps.forEach((step, idx) => {
+        const row = document.createElement('div');
+        row.className = 'py-2.5 flex items-center justify-between gap-3';
+
+        const left = document.createElement('div');
+        left.className = 'flex items-center gap-3';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = step.done
+          ? 'w-5 h-5 rounded-sm mono-btn-primary text-xs mono flex items-center justify-center shrink-0'
+          : 'w-5 h-5 rounded-sm mono-btn-outline text-xs mono flex items-center justify-center shrink-0';
+        btn.textContent = step.done ? '✓' : String(idx + 1);
+        btn.addEventListener('click', () => {
+          step.done = !step.done;
+          saveState();
+          renderLaunchCenter();
+        });
+
+        const span = document.createElement('span');
+        span.className = 'text-xs ' + (step.done ? 'line-through muted-text' : 'font-medium');
+        span.textContent = step.title;
+
+        left.appendChild(btn);
+        left.appendChild(span);
+        row.appendChild(left);
+        container.appendChild(row);
+      });
+
+      if (xrayPre) {
+        xrayPre.textContent = xraySnippets[activeXrayKey] || xraySnippets.theme;
+      }
+    }
+
+    function renderAll() {
+      renderHabits();
+      renderExpenses();
+      renderKPIs();
+      renderBudgetGuardrail();
+      renderStreakMatrix();
+      renderPomodoroSelect();
+      renderServices();
+      renderNotionAndSlackPreviews();
+      renderScorecardAndSync();
+      renderLaunchCenter();
+      renderCharts();
+      renderCorrelationChart();
+      renderProjectionChart();
+    }
+
+    // --- EVENT LISTENERS ---
+    window.addEventListener('DOMContentLoaded', () => {
+      applyTheme();
+      applyTab();
+      renderAll();
+
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        state.darkMode = !state.darkMode;
+        saveState();
+        applyTheme();
+      });
+
+      document.getElementById('tabAllBtn').addEventListener('click', () => {
+        state.activeTab = 'dashboard';
+        saveState();
+        applyTab();
+      });
+
+      document.getElementById('tabIntegrationsBtn').addEventListener('click', () => {
+        state.activeTab = 'integrations';
+        saveState();
+        applyTab();
+      });
+
+      document.getElementById('closeToastBtn').addEventListener('click', () => {
+        document.getElementById('statusToast').classList.add('hidden');
+      });
+
+      // Add Habit
+      document.getElementById('habitForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('habitNameInput');
+        const name = input.value.trim();
+        if (!name) return;
+        const catSelect = document.getElementById('habitCategoryInput');
+        state.habits.unshift({
+          id: 'h_' + Date.now(),
+          name,
+          category: catSelect ? catSelect.value : 'Focus',
+          streak: 1,
+          completedToday: true,
+          week: [false, false, false, false, false, false, true]
+        });
+        input.value = '';
+        saveState();
+        renderAll();
+      });
+
+      // Reset Today's Habits
+      document.getElementById('resetTodayHabitsBtn').addEventListener('click', () => {
+        state.habits.forEach((h) => { h.completedToday = false; });
+        saveState();
+        renderAll();
+        showToast("Reset today's completion checkmarks.");
+      });
+
+      // Add Expense
+      document.getElementById('expenseForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const titleInput = document.getElementById('expenseTitleInput');
+        const amountInput = document.getElementById('expenseAmountInput');
+        const categoryInput = document.getElementById('expenseCategoryInput');
+
+        const title = titleInput.value.trim();
+        const amount = parseFloat(amountInput.value);
+        if (!title || isNaN(amount) || amount <= 0) return;
+
+        state.expenses.unshift({
+          id: 'e_' + Date.now(),
+          title,
+          amount,
+          category: categoryInput.value,
+          date: 'Today'
+        });
+
+        titleInput.value = '';
+        amountInput.value = '';
+        saveState();
+        renderAll();
+      });
+
+      // Filter Expense
+      document.getElementById('expenseFilterSelect').addEventListener('change', () => {
+        renderExpenses();
+      });
+
+      // Clear Expenses
+      document.getElementById('clearExpensesBtn').addEventListener('click', () => {
+        state.expenses = [];
+        saveState();
+        renderAll();
+        showToast('Cleared expense ledger.');
+      });
+
+      // Sync All Services
+      document.getElementById('syncAllServicesBtn').addEventListener('click', () => {
+        const activeNames = state.services.filter((s) => s.connected).map((s) => s.name);
+        showToast('Synced ' + state.habits.length + ' habits & ' + state.expenses.length + ' expenses with: ' + (activeNames.join(', ') || 'No active nodes'));
+      });
+
+      // Step 3: Interactive Gemini Coach Controls
+      document.getElementById('generateGeminiDigestBtn').addEventListener('click', () => {
+        const mode = document.getElementById('geminiModeSelect').value;
+        document.getElementById('geminiDigestOutput').textContent = buildGeminiResponse(mode, '');
+      });
+
+      document.querySelectorAll('.geminiQuickModeBtn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const mode = btn.getAttribute('data-gemini-mode');
+          document.getElementById('geminiModeSelect').value = mode;
+          document.getElementById('geminiDigestOutput').textContent = buildGeminiResponse(mode, '');
+        });
+      });
+
+      document.getElementById('geminiPromptForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('geminiPromptInput');
+        const q = input.value.trim();
+        if (!q) return;
+        document.getElementById('geminiDigestOutput').textContent = buildGeminiResponse('custom', q);
+        input.value = '';
+      });
+
+      // Step 3: Spotify Deck & Web Audio Synth Controls
+      document.getElementById('spotifyPlayPauseBtn').addEventListener('click', () => {
+        state.spotifyPlaying = !state.spotifyPlaying;
+        document.getElementById('spotifyPlayPauseBtn').textContent = state.spotifyPlaying ? 'PAUSE' : 'PLAY';
+        document.getElementById('spotifyStateBadge').textContent = state.spotifyPlaying ? 'PLAYING' : 'PAUSED';
+        updateSynthAudio();
+      });
+
+      document.getElementById('spotifyNextTrackBtn').addEventListener('click', () => {
+        state.spotifyTrackIndex = (state.spotifyTrackIndex + 1) % spotifyTracks.length;
+        document.getElementById('spotifyTrackTitle').textContent = spotifyTracks[state.spotifyTrackIndex];
+        updateSynthAudio();
+        renderNotionAndSlackPreviews();
+      });
+
+      document.getElementById('spotifyMuteBtn').addEventListener('click', () => {
+        synthMuted = !synthMuted;
+        document.getElementById('spotifyMuteBtn').textContent = synthMuted ? 'UNMUTE' : 'MUTE';
+        updateSynthAudio();
+      });
+
+      document.getElementById('spotifyVolumeSlider').addEventListener('input', (e) => {
+        document.getElementById('spotifyVolumeLabel').textContent = e.target.value + '%';
+        updateSynthAudio();
+      });
+
+      // Step 3: Notion Markdown & CSV Exporters
+      document.getElementById('copyNotionMdBtn').addEventListener('click', () => {
+        const md = document.getElementById('notionMarkdownPreview').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(md).then(() => showToast('Copied Notion Markdown table to clipboard.')).catch(() => fallbackCopy(md));
+        } else {
+          fallbackCopy(md);
+        }
+      });
+
+      document.getElementById('downloadNotionCsvBtn').addEventListener('click', () => {
+        const csvLines = [
+          'Type,Title,StreakOrAmount,StatusOrCategory,Date',
+          ...state.habits.map((h) => `Habit,"${h.name.replace(/"/g, '""')}",${h.streak},${h.completedToday ? 'Completed' : 'Pending'},Today`),
+          ...state.expenses.map((e) => `Expense,"${e.title.replace(/"/g, '""')}",${e.amount},"${e.category}",${e.date}`)
+        ];
+        const blob = new Blob([csvLines.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'monoflow_notion_export.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Downloaded monoflow_notion_export.csv for Notion import.');
+      });
+
+      // Step 3: Slack Standup Composer
+      document.getElementById('slackChannelSelect').addEventListener('change', () => {
+        renderNotionAndSlackPreviews();
+      });
+
+      document.getElementById('copySlackMsgBtn').addEventListener('click', () => {
+        const msg = document.getElementById('slackMessagePreview').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(msg).then(() => showToast('Copied Slack check-in message to clipboard.')).catch(() => fallbackCopy(msg));
+        } else {
+          fallbackCopy(msg);
+        }
+      });
+
+      // Step 2: Set Daily Budget Cap
+      document.getElementById('saveCapBtn').addEventListener('click', () => {
+        const val = parseFloat(document.getElementById('dailyCapInput').value);
+        if (!isNaN(val) && val >= 50) {
+          state.dailyBudgetCap = val;
+          saveState();
+          renderAll();
+          showToast('Daily budget cap updated to ₹' + val.toLocaleString('en-IN') + '.');
+        }
+      });
+
+      // Step 2: Verify No-Spend Habit against Daily Budget Cap
+      document.getElementById('syncNoSpendHabitBtn').addEventListener('click', () => {
+        const cap = Number(state.dailyBudgetCap) || 600;
+        const todaySpent = state.expenses
+          .filter((e) => e.date === 'Today')
+          .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+
+        const targetHabit = state.habits.find((h) => h.name.toLowerCase().includes('spend') || h.name.toLowerCase().includes('impulse')) || state.habits[0];
+        if (!targetHabit) {
+          showToast('Add a spending habit first to verify.');
+          return;
+        }
+
+        if (todaySpent <= cap) {
+          if (!targetHabit.completedToday) {
+            targetHabit.completedToday = true;
+            targetHabit.streak += 1;
+            if (Array.isArray(targetHabit.week)) targetHabit.week[6] = true;
+          }
+          saveState();
+          renderAll();
+          showToast('Verified! Today spend (₹' + todaySpent + ') is within ₹' + cap + ' cap. "' + targetHabit.name + '" checked off.');
+        } else {
+          showToast('Today spend (₹' + todaySpent + ') exceeds your ₹' + cap + ' cap. Adjust cap or review expenses.');
+        }
+      });
+
+      // Step 2: Google Workspace One-Click Exports
+      function openWorkspaceDrawer(title, content, externalUrl) {
+        const drawer = document.getElementById('workspaceExportDrawer');
+        document.getElementById('workspaceExportTitle').textContent = title;
+        document.getElementById('workspaceExportContent').textContent = content;
+        const link = document.getElementById('openExternalGoogleUrl');
+        link.href = externalUrl;
+        drawer.classList.remove('hidden');
+      }
+
+      document.getElementById('exportGoogleTasksBtn').addEventListener('click', () => {
+        const pending = state.habits.filter((h) => !h.completedToday);
+        const done = state.habits.filter((h) => h.completedToday);
+        const lines = [
+          'GOOGLE TASKS // MONOFLOW DAILY RITUALS',
+          '--------------------------------------',
+          ...pending.map((h) => '[ ] ' + h.name + ' (' + h.streak + 'd streak)'),
+          ...done.map((h) => '[x] ' + h.name + ' (' + h.streak + 'd streak)')
+        ];
+        openWorkspaceDrawer('GOOGLE TASKS // CHECKLIST PAYLOAD', lines.join('\n'), 'https://tasks.google.com/');
+      });
+
+      document.getElementById('exportGoogleCalBtn').addEventListener('click', () => {
+        const habitNames = state.habits.map((h) => '• ' + h.name + ' (' + h.streak + 'd streak)').join('\n');
+        const details = 'MONOFLOW Daily Rituals & Budget Review:\n' + habitNames + '\nDaily Cap: ₹' + state.dailyBudgetCap;
+        const calUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' +
+          encodeURIComponent('MONOFLOW // Daily Habit & Ledger Ritual') +
+          '&details=' + encodeURIComponent(details);
+        openWorkspaceDrawer(
+          'GOOGLE CALENDAR // TIME-BLOCK EVENT READY',
+          'Event Title: MONOFLOW // Daily Habit & Ledger Ritual\nWindow: Daily Morning Focus Block\n\nAgenda:\n' + details,
+          calUrl
+        );
+      });
+
+      document.getElementById('exportGoogleKeepBtn').addEventListener('click', () => {
+        const totalSpent = state.expenses.reduce((s, e) => s + (Number(e.amount) || 0), 0);
+        const noteLines = [
+          'MONOFLOW // DAILY SNAPSHOT',
+          '• Habits Completed Today: ' + state.habits.filter((h) => h.completedToday).length + '/' + state.habits.length,
+          '• Daily Budget Cap: ₹' + state.dailyBudgetCap + ' | Total Logged: ₹' + totalSpent,
+          '',
+          'ACTIVE STREAKS:',
+          ...state.habits.map((h) => '  - ' + h.name + ': ' + h.streak + 'd (' + (h.completedToday ? 'DONE' : 'PENDING') + ')'),
+          '',
+          'RECENT EXPENSES:',
+          ...state.expenses.slice(0, 5).map((e) => '  - ' + e.title + ': ₹' + e.amount + ' [' + e.category + ']')
+        ];
+        openWorkspaceDrawer('GOOGLE KEEP // SNAPSHOT NOTE', noteLines.join('\n'), 'https://keep.google.com/');
+      });
+
+      document.getElementById('copyExportPayloadBtn').addEventListener('click', () => {
+        const text = document.getElementById('workspaceExportContent').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            showToast('Copied Google Workspace payload to clipboard.');
+          }).catch(() => {
+            fallbackCopy(text);
+          });
+        } else {
+          fallbackCopy(text);
+        }
+      });
+
+      function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast('Copied Google Workspace payload to clipboard.');
+        } catch (err) {
+          showToast('Payload ready to copy below.');
+        }
+        document.body.removeChild(ta);
+      }
+
+      document.getElementById('closeExportDrawerBtn').addEventListener('click', () => {
+        document.getElementById('workspaceExportDrawer').classList.add('hidden');
+      });
+
+      // Step 4: Pomodoro Focus Timer Listeners
+      document.getElementById('pomodoroStartPauseBtn').addEventListener('click', () => {
+        togglePomodoroTimer();
+      });
+
+      document.getElementById('pomodoroModeToggleBtn').addEventListener('click', () => {
+        if (pomodoroTimerId) {
+          clearInterval(pomodoroTimerId);
+          pomodoroTimerId = null;
+        }
+        pomodoroRunning = false;
+        pomodoroIsBreak = !pomodoroIsBreak;
+        pomodoroSeconds = pomodoroIsBreak ? 5 * 60 : 25 * 60;
+        updatePomodoroUI();
+      });
+
+      document.getElementById('pomodoroResetBtn').addEventListener('click', () => {
+        if (pomodoroTimerId) {
+          clearInterval(pomodoroTimerId);
+          pomodoroTimerId = null;
+        }
+        pomodoroRunning = false;
+        pomodoroSeconds = pomodoroIsBreak ? 5 * 60 : 25 * 60;
+        updatePomodoroUI();
+      });
+
+      document.getElementById('pomodoroCompleteHabitBtn').addEventListener('click', () => {
+        completeSelectedPomodoroHabit();
+      });
+
+      // Step 4: Quick Command Palette Listeners & Keyboard Shortcut (Ctrl+K / Cmd+K)
+      const cmdModal = document.getElementById('cmdPaletteModal');
+      const cmdInput = document.getElementById('cmdPaletteInput');
+
+      function openCmdModal() {
+        cmdModal.classList.remove('hidden');
+        cmdInput.focus();
+      }
+
+      function closeCmdModal() {
+        cmdModal.classList.add('hidden');
+      }
+
+      document.getElementById('openCmdPaletteBtn').addEventListener('click', openCmdModal);
+      document.getElementById('closeCmdPaletteBtn').addEventListener('click', closeCmdModal);
+
+      window.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          if (cmdModal.classList.contains('hidden')) {
+            openCmdModal();
+          } else {
+            closeCmdModal();
+          }
+        } else if (e.key === 'Escape' && !cmdModal.classList.contains('hidden')) {
+          closeCmdModal();
+        }
+      });
+
+      document.getElementById('cmdPaletteForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = cmdInput.value;
+        cmdInput.value = '';
+        closeCmdModal();
+        executeQuickCommand(val);
+      });
+
+      document.querySelectorAll('.cmdQuickBtn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const cmd = btn.getAttribute('data-cmd');
+          closeCmdModal();
+          executeQuickCommand(cmd);
+        });
+      });
+
+      // Step 4: JSON Backup, Restore & Factory Reset
+      document.getElementById('exportJsonBackupBtn').addEventListener('click', () => {
+        triggerJsonBackupDownload();
+      });
+
+      document.getElementById('importJsonFileInput').addEventListener('change', (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          try {
+            const imported = JSON.parse(ev.target.result);
+            if (imported && Array.isArray(imported.habits) && Array.isArray(imported.expenses)) {
+              state = { ...defaultState, ...imported };
+              saveState();
+              applyTheme();
+              applyTab();
+              renderAll();
+              showToast('Restored workspace state from JSON backup.');
+            } else {
+              showToast('Invalid backup file structure.');
+            }
+          } catch (err) {
+            showToast('Could not parse JSON backup file.');
+          }
+        };
+        reader.readAsText(file);
+        e.target.value = '';
+      });
+
+      document.getElementById('resetFactoryDefaultsBtn').addEventListener('click', () => {
+        state = JSON.parse(JSON.stringify(defaultState));
+        state.habits = state.habits.map((h, idx) => ({
+          ...h,
+          week: [true, idx % 2 === 0, true, true, idx !== 1, true, !!h.completedToday]
+        }));
+        saveState();
+        applyTheme();
+        applyTab();
+        renderAll();
+        showToast('Workspace reset to fresh demo defaults.');
+      });
+
+      // Step 5: Scorecard Tab, Monthly Income Update, Receipt Copy/Print & Live Chat Sync
+      document.getElementById('tabScorecardBtn').addEventListener('click', () => {
+        state.activeTab = 'scorecard';
+        saveState();
+        applyTab();
+      });
+
+      document.getElementById('saveMonthlyIncomeBtn').addEventListener('click', () => {
+        const val = parseFloat(document.getElementById('monthlyIncomeInput').value);
+        if (!isNaN(val) && val >= 500) {
+          state.monthlyIncome = val;
+          saveState();
+          renderAll();
+          showToast('Monthly budget/allowance updated to ₹' + val.toLocaleString('en-IN') + '.');
+        }
+      });
+
+      document.getElementById('copyScorecardReceiptBtn').addEventListener('click', () => {
+        const text = document.getElementById('monochromeReceiptPre').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => showToast('Copied Monochrome Scorecard Receipt.')).catch(() => fallbackCopy(text));
+        } else {
+          fallbackCopy(text);
+        }
+      });
+
+      document.getElementById('printScorecardBtn').addEventListener('click', () => {
+        window.print();
+      });
+
+      document.getElementById('copyLiveChatPromptBtn').addEventListener('click', () => {
+        const text = document.getElementById('liveChatSyncPromptPre').textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => showToast('Copied chat sync command! Paste it in chat anytime.')).catch(() => fallbackCopy(text));
+        } else {
+          fallbackCopy(text);
+        }
+      });
+
+      // Step 6: Launch & PWA Tab, Standalone HTML/Manifest Downloads & Code X-Ray
+      document.getElementById('tabLaunchBtn').addEventListener('click', () => {
+        state.activeTab = 'launch';
+        saveState();
+        applyTab();
+      });
+
+      document.getElementById('downloadStandaloneHtmlBtn').addEventListener('click', () => {
+        const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'index.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        if (Array.isArray(state.launchSteps) && state.launchSteps[0]) {
+          state.launchSteps[0].done = true;
+          saveState();
+          renderLaunchCenter();
+        }
+        showToast('Downloaded standalone index.html!');
+      });
+
+      document.getElementById('downloadPwaManifestBtn').addEventListener('click', () => {
+        const manifest = {
+          name: 'MONOFLOW // Habit & Expense Studio',
+          short_name: 'MONOFLOW',
+          start_url: './index.html',
+          display: 'standalone',
+          background_color: '#0a0a0a',
+          theme_color: '#0a0a0a'
+        };
+        const blob = new Blob([JSON.stringify(manifest, null, 2)], { type: 'application/json;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'manifest.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Downloaded PWA manifest.json!');
+      });
+
+      document.querySelectorAll('.xrayLayerBtn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activeXrayKey = btn.getAttribute('data-xray') || 'theme';
+          document.querySelectorAll('.xrayLayerBtn').forEach((b) => {
+            b.className = b === btn
+              ? 'xrayLayerBtn mono-btn-primary px-2.5 py-1.5 text-xs mono rounded-sm text-left'
+              : 'xrayLayerBtn mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm text-left';
+          });
+          renderLaunchCenter();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
