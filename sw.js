@@ -1,3 +1,4 @@
+// MONOFLOW Offline Service Worker
 const CACHE_NAME = 'monoflow-v1';
 
 self.addEventListener('install', (event) => {

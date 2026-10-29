@@ -2,7 +2,23 @@
   "name": "MONOFLOW // Habit & Expense Studio",
   "short_name": "MONOFLOW",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a"
+  "theme_color": "#0a0a0a",
+  "description": "Minimalist monochrome habit tracker and personal expense studio.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
