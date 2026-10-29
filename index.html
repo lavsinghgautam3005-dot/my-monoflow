@@ -109,47 +109,57 @@
     .divider {
       border-color: var(--border);
     }
+
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-neutral-500 selection:text-white">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
-    <!-- Top Header -->
-    <header class="flex flex-wrap items-center justify-between gap-4 pb-6 border-b divider">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 flex items-center justify-center mono-btn-primary font-bold mono text-sm tracking-tighter rounded-sm">
-          M//F
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg font-semibold tracking-tight">MONOFLOW</h1>
-            <span class="mono text-[11px] px-2 py-0.5 rounded-sm mono-subtle">STEP 06 // LAUNCH &amp; PWA STUDIO</span>
+    <!-- Top Header (Fully Responsive Mobile + Desktop) -->
+    <header class="pb-4 sm:pb-6 border-b divider space-y-3 sm:space-y-4">
+      <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <div class="w-8 h-8 flex items-center justify-center mono-btn-primary font-bold mono text-xs sm:text-sm tracking-tighter rounded-sm shrink-0">
+            M//F
           </div>
-          <p class="text-xs muted-text">Minimalist Habit &amp; Expense Workspace</p>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <h1 class="text-base sm:text-lg font-semibold tracking-tight truncate">MONOFLOW</h1>
+              <span class="mono text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-sm mono-subtle shrink-0">STUDIO</span>
+            </div>
+            <p class="text-[11px] sm:text-xs muted-text truncate">Minimalist Habit &amp; Expense Workspace</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <!-- Step 4: Quick Command Palette Trigger -->
+          <button id="openCmdPaletteBtn" type="button" class="mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1" aria-label="Open Quick Command Palette">
+            <span>CMD</span>
+            <kbd class="hidden sm:inline-block px-1 py-0.2 text-[10px] mono-subtle rounded-sm">Ctrl+K</kbd>
+          </button>
+
+          <!-- High-Contrast Theme Toggle -->
+          <button id="themeToggleBtn" type="button" class="mono-btn-outline px-2.5 sm:px-3 py-1.5 rounded-sm text-xs font-medium flex items-center gap-1.5" aria-label="Toggle Light and Dark Contrast Theme">
+            <span id="themeIndicator" class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-current inline-block"></span>
+            <span id="themeLabel" class="mono text-[11px] sm:text-xs">LIGHT // B&amp;W</span>
+          </button>
         </div>
       </div>
 
-      <div class="flex items-center gap-2 sm:gap-3">
-        <!-- View Switcher -->
-        <div class="flex items-center rounded-sm p-0.5 mono-subtle text-xs font-medium">
-          <button id="tabAllBtn" class="px-2.5 py-1 rounded-sm mono-btn-primary" type="button">Dashboard</button>
-          <button id="tabIntegrationsBtn" class="px-2.5 py-1 rounded-sm" type="button">Ecosystem Hub</button>
-          <button id="tabScorecardBtn" class="px-2.5 py-1 rounded-sm" type="button">Scorecard</button>
-          <button id="tabLaunchBtn" class="px-2.5 py-1 rounded-sm" type="button">Launch &amp; PWA</button>
-        </div>
-
-        <!-- Step 4: Quick Command Palette Trigger -->
-        <button id="openCmdPaletteBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5" aria-label="Open Quick Command Palette">
-          <span>CMD</span>
-          <kbd class="px-1 py-0.2 text-[10px] mono-subtle rounded-sm">Ctrl+K</kbd>
-        </button>
-
-        <!-- High-Contrast Theme Toggle -->
-        <button id="themeToggleBtn" type="button" class="mono-btn-outline px-3 py-1.5 rounded-sm text-xs font-medium flex items-center gap-2" aria-label="Toggle Light and Dark Contrast Theme">
-          <span id="themeIndicator" class="w-2.5 h-2.5 rounded-full bg-current inline-block"></span>
-          <span id="themeLabel" class="mono">LIGHT // B&amp;W</span>
-        </button>
-      </div>
+      <!-- Horizontally Scrollable Responsive Segmented Navigation Bar -->
+      <nav class="flex items-center overflow-x-auto scrollbar-none rounded-sm p-1 mono-subtle text-xs font-medium gap-1 -mx-1 sm:mx-0">
+        <button id="tabAllBtn" class="px-3 py-1.5 rounded-sm mono-btn-primary whitespace-nowrap shrink-0 text-center" type="button">Dashboard</button>
+        <button id="tabIntegrationsBtn" class="px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center" type="button">Ecosystem Hub</button>
+        <button id="tabScorecardBtn" class="px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center" type="button">Scorecard</button>
+        <button id="tabLaunchBtn" class="px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center" type="button">Launch &amp; PWA</button>
+      </nav>
     </header>
 
     <!-- Toast Notification Banner -->
@@ -194,59 +204,59 @@
     </section>
 
     <!-- STEP 2: DAILY BUDGET CAP & HABIT CORRELATION BAR -->
-    <section class="mono-card p-4 rounded-sm mb-6">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="flex-1 min-w-[240px]">
-          <div class="flex items-center justify-between text-xs mono">
-            <span class="uppercase tracking-wider muted-text">00 // Daily Budget Cap &amp; Habit Guardrail</span>
-            <span id="budgetStatusBadge" class="px-2 py-0.5 rounded-sm mono-subtle font-medium">UNDER CAP // STREAK SAFE</span>
+    <section class="mono-card p-3.5 sm:p-4 rounded-sm mb-4 sm:mb-6">
+      <div class="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-between text-[11px] sm:text-xs mono gap-2">
+            <span class="uppercase tracking-wider muted-text truncate">00 // Daily Budget Cap</span>
+            <span id="budgetStatusBadge" class="px-1.5 sm:px-2 py-0.5 rounded-sm mono-subtle font-medium text-[10px] sm:text-xs shrink-0">UNDER CAP // STREAK SAFE</span>
           </div>
           <div class="w-full h-2 mono-subtle rounded-sm overflow-hidden mt-2">
             <div id="budgetProgressBar" class="h-full transition-all duration-300" style="width: 45%; background-color: var(--fg);"></div>
           </div>
-          <div class="flex items-center justify-between text-[11px] mono muted-text mt-1.5">
-            <span>Today's Spend: <strong id="todaySpendLabel" class=" style='color: var(--fg);'">₹420</strong> / Cap: <strong id="dailyCapLabel">₹600</strong></span>
-            <span id="noSpendHabitLinkText">Linked to "Zero Impulse Spending" ritual</span>
+          <div class="flex flex-wrap items-center justify-between text-[10px] sm:text-[11px] mono muted-text mt-1.5 gap-1">
+            <span>Today's Spend: <strong id="todaySpendLabel" style="color: var(--fg);">₹420</strong> / Cap: <strong id="dailyCapLabel">₹600</strong></span>
+            <span id="noSpendHabitLinkText" class="truncate">Linked to "Zero Impulse Spending"</span>
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
-          <label for="dailyCapInput" class="text-xs mono muted-text">Cap (₹):</label>
-          <input id="dailyCapInput" type="number" min="100" step="50" value="600" class="mono-input w-24 px-2.5 py-1.5 text-xs mono rounded-sm" />
-          <button id="saveCapBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">Set Cap</button>
-          <button id="syncNoSpendHabitBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">Verify No-Spend</button>
+        <div class="pt-2 sm:pt-0 border-t sm:border-t-0 divider flex items-center gap-1.5 sm:gap-2">
+          <label for="dailyCapInput" class="text-xs mono muted-text shrink-0">Cap:</label>
+          <input id="dailyCapInput" type="number" min="100" step="50" value="600" class="mono-input w-20 sm:w-24 px-2 py-1.5 text-xs mono rounded-sm" />
+          <button id="saveCapBtn" type="button" class="mono-btn-outline px-2.5 sm:px-3 py-1.5 text-xs mono rounded-sm shrink-0">Set Cap</button>
+          <button id="syncNoSpendHabitBtn" type="button" class="mono-btn-primary px-2.5 sm:px-3 py-1.5 text-xs mono rounded-sm shrink-0">Verify No-Spend</button>
         </div>
       </div>
     </section>
 
     <!-- STEP 4: MINIMALIST POMODORO FOCUS TIMER & HABIT SESSION BAR -->
-    <section class="mono-card p-4 rounded-sm mb-6">
-      <div class="flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-4">
-          <div class="px-3 py-2 rounded-sm mono-subtle text-center min-w-[96px]">
-            <span id="pomodoroTimeDisplay" class="text-xl font-bold mono tracking-tight">25:00</span>
-            <p id="pomodoroModeBadge" class="text-[10px] mono uppercase muted-text">FOCUS // 25M</p>
+    <section class="mono-card p-3.5 sm:p-4 rounded-sm mb-4 sm:mb-6">
+      <div class="space-y-3 sm:space-y-0 sm:flex sm:items-center sm:justify-between sm:gap-4">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-sm mono-subtle text-center min-w-[80px] sm:min-w-[96px] shrink-0">
+            <span id="pomodoroTimeDisplay" class="text-lg sm:text-xl font-bold mono tracking-tight">25:00</span>
+            <p id="pomodoroModeBadge" class="text-[9px] sm:text-[10px] mono uppercase muted-text">FOCUS // 25M</p>
           </div>
-          <div>
-            <span class="mono text-[10px] uppercase tracking-widest muted-text">00B // Ritual Focus Timer</span>
-            <div class="flex flex-wrap items-center gap-2 mt-1">
-              <label for="pomodoroHabitSelect" class="text-xs muted-text">Target Habit:</label>
-              <select id="pomodoroHabitSelect" class="mono-input px-2.5 py-1 text-xs rounded-sm"></select>
+          <div class="min-w-0 flex-1">
+            <span class="mono text-[9px] sm:text-[10px] uppercase tracking-widest muted-text">00B // Focus Timer</span>
+            <div class="flex items-center gap-1.5 mt-0.5">
+              <label for="pomodoroHabitSelect" class="text-[11px] sm:text-xs muted-text shrink-0">Target:</label>
+              <select id="pomodoroHabitSelect" class="mono-input w-full px-2 py-1 text-[11px] sm:text-xs rounded-sm truncate"></select>
             </div>
-            <p class="text-[11px] muted-text mono mt-1">
-              <label class="inline-flex items-center gap-1.5 cursor-pointer">
+            <p class="text-[10px] sm:text-[11px] muted-text mono mt-1 truncate">
+              <label class="inline-flex items-center gap-1 cursor-pointer">
                 <input id="pomodoroSyncAudioCheckbox" type="checkbox" checked class="accent-current" />
-                <span>Auto-play monochrome focus synth while timer runs</span>
+                <span>Auto-play synth audio</span>
               </label>
             </p>
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
-          <button id="pomodoroStartPauseBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">START TIMER</button>
-          <button id="pomodoroModeToggleBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm">25m / 5m</button>
-          <button id="pomodoroResetBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm">Reset</button>
-          <button id="pomodoroCompleteHabitBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">Complete Ritual ✓</button>
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 sm:gap-2">
+          <button id="pomodoroStartPauseBtn" type="button" class="mono-btn-primary px-2.5 py-1.5 text-xs mono rounded-sm text-center">START TIMER</button>
+          <button id="pomodoroModeToggleBtn" type="button" class="mono-btn-outline px-2 py-1.5 text-xs mono rounded-sm text-center">25m / 5m</button>
+          <button id="pomodoroResetBtn" type="button" class="mono-btn-outline px-2 py-1.5 text-xs mono rounded-sm text-center">Reset</button>
+          <button id="pomodoroCompleteHabitBtn" type="button" class="mono-btn-outline px-2.5 py-1.5 text-xs mono rounded-sm text-center">Complete Ritual ✓</button>
         </div>
       </div>
     </section>
@@ -267,18 +277,18 @@
               <button id="resetTodayHabitsBtn" type="button" class="text-xs muted-text hover:underline mono">Reset Today</button>
             </div>
 
-            <!-- Add Habit Form with Category Tag -->
-            <form id="habitForm" class="mt-4 grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <!-- Add Habit Form with Responsive Layout -->
+            <form id="habitForm" class="mt-4 grid grid-cols-12 gap-2">
               <input
                 id="habitNameInput"
                 type="text"
-                placeholder="New habit (e.g., Read 20 pages, Morning run)..."
-                class="mono-input sm:col-span-7 px-3 py-2 text-xs rounded-sm"
+                placeholder="New habit (e.g., Read 20 pages)..."
+                class="mono-input col-span-12 sm:col-span-7 px-3 py-2 text-xs rounded-sm"
                 required
               />
               <select
                 id="habitCategoryInput"
-                class="mono-input sm:col-span-3 px-2 py-2 text-xs rounded-sm mono"
+                class="mono-input col-span-7 sm:col-span-3 px-2 py-2 text-xs rounded-sm mono"
                 aria-label="Habit category tag"
               >
                 <option value="Focus">Focus</option>
@@ -286,7 +296,7 @@
                 <option value="Health">Health</option>
                 <option value="Mind">Mind</option>
               </select>
-              <button type="submit" class="mono-btn-primary sm:col-span-2 px-3 py-2 text-xs font-medium rounded-sm mono">
+              <button type="submit" class="mono-btn-primary col-span-5 sm:col-span-2 px-3 py-2 text-xs font-medium rounded-sm mono text-center">
                 + ADD
               </button>
             </form>
@@ -318,13 +328,13 @@
               </select>
             </div>
 
-            <!-- Add Expense Form -->
-            <form id="expenseForm" class="mt-4 grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <!-- Add Expense Form (Mobile-Optimized Grid) -->
+            <form id="expenseForm" class="mt-4 grid grid-cols-12 gap-2">
               <input
                 id="expenseTitleInput"
                 type="text"
-                placeholder="Item (e.g., Iced coffee, Notion Plus)"
-                class="mono-input sm:col-span-5 px-3 py-2 text-xs rounded-sm"
+                placeholder="Item (e.g., Iced coffee)"
+                class="mono-input col-span-12 sm:col-span-5 px-3 py-2 text-xs rounded-sm"
                 required
               />
               <input
@@ -332,21 +342,21 @@
                 type="number"
                 min="1"
                 step="any"
-                placeholder="₹ Amount"
-                class="mono-input sm:col-span-3 px-3 py-2 text-xs rounded-sm mono"
+                placeholder="₹ Amt"
+                class="mono-input col-span-4 sm:col-span-3 px-2.5 py-2 text-xs rounded-sm mono"
                 required
               />
               <select
                 id="expenseCategoryInput"
-                class="mono-input sm:col-span-2 px-2 py-2 text-xs rounded-sm"
+                class="mono-input col-span-4 sm:col-span-2 px-1.5 py-2 text-xs rounded-sm"
                 aria-label="Expense category"
               >
                 <option value="Food">Food</option>
-                <option value="Study & Tech">Study &amp; Tech</option>
-                <option value="Transport">Transport</option>
-                <option value="Lifestyle">Lifestyle</option>
+                <option value="Study & Tech">Tech</option>
+                <option value="Transport">Travel</option>
+                <option value="Lifestyle">Style</option>
               </select>
-              <button type="submit" class="mono-btn-primary sm:col-span-2 px-3 py-2 text-xs font-medium rounded-sm mono">
+              <button type="submit" class="mono-btn-primary col-span-4 sm:col-span-2 px-2 py-2 text-xs font-medium rounded-sm mono text-center">
                 + LOG
               </button>
             </form>
@@ -1365,9 +1375,9 @@
       let totalCells = 0;
       let completedCells = 0;
 
-      // Header row
+      // Header row with minimum width to prevent mobile squishing
       const headerRow = document.createElement('div');
-      headerRow.className = 'grid grid-cols-12 items-center gap-2 text-[10px] mono muted-text pb-1';
+      headerRow.className = 'grid grid-cols-12 items-center gap-2 text-[10px] mono muted-text pb-1 min-w-[320px]';
       const labelCol = document.createElement('div');
       labelCol.className = 'col-span-5 truncate uppercase';
       labelCol.textContent = 'Habit Ritual';
@@ -1390,7 +1400,7 @@
         habit.week[6] = !!habit.completedToday;
 
         const row = document.createElement('div');
-        row.className = 'grid grid-cols-12 items-center gap-2 py-1';
+        row.className = 'grid grid-cols-12 items-center gap-2 py-1 min-w-[320px]';
 
         const nameDiv = document.createElement('div');
         nameDiv.className = 'col-span-5 text-xs truncate font-medium';
