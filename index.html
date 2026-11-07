@@ -136,33 +136,39 @@
 <body class="min-h-screen antialiased selection:bg-neutral-500 selection:text-white">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
 
-    <!-- Top Header (Responsive Mobile + Desktop) -->
-    <header class="pb-4 sm:pb-6 border-b divider space-y-3 sm:space-y-4">
+    <!-- Top Header (Ultra-Clean with Claude-style Sidebar Toggle) -->
+    <header class="pb-3.5 sm:pb-4 border-b divider">
       <div class="flex items-center justify-between gap-2">
         <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+          <!-- Claude-style Three-Line Sidebar Trigger Button -->
+          <button id="sidebarToggleBtn" type="button" class="mono-btn-outline p-2 sm:p-2.5 rounded-sm text-xs mono flex items-center justify-center shrink-0 transition-transform active:scale-95" aria-label="Open Navigation Sidebar" title="Open Navigation Menu">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M4 6h16M4 12h12M4 18h8"></path>
+            </svg>
+          </button>
+
           <div class="w-8 h-8 flex items-center justify-center mono-btn-primary font-bold mono text-xs sm:text-sm tracking-tighter rounded-sm shrink-0">
             M//F
           </div>
           <div class="min-w-0">
             <div class="flex items-center gap-1.5 sm:gap-2">
               <h1 class="text-base sm:text-lg font-semibold tracking-tight truncate">MONOFLOW</h1>
-              <span class="mono text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-sm mono-subtle shrink-0">PRO STUDIO</span>
+              <span id="currentViewIndicator" class="mono text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-sm mono-subtle shrink-0">DASHBOARD</span>
             </div>
-            <p class="text-[11px] sm:text-xs muted-text truncate">Minimalist Habit &amp; Expense Ecosystem</p>
+            <p class="text-[11px] sm:text-xs muted-text truncate hidden sm:block">Minimalist Habit &amp; Expense Studio</p>
           </div>
         </div>
 
         <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          <!-- Scheduled Notification Master Toggle -->
+          <!-- Scheduled Notification Master Toggle (Zero Emojis) -->
           <button id="globalNotifToggleBtn" type="button" class="mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5" aria-label="Toggle Scheduled Task Notifications" title="Manage Scheduled Notifications">
-            <span id="globalNotifIcon">🔕</span>
-            <span id="globalNotifLabel" class="hidden sm:inline">ALERTS OFF</span>
+            <span id="globalNotifDot" class="w-2 h-2 rounded-full border border-current inline-block"></span>
+            <span id="globalNotifLabel" class="text-xs">ALERTS OFF</span>
           </button>
 
           <!-- Ghost Mode Link Generator -->
-          <button id="openGhostModeBtn" type="button" class="mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1" title="Generate Public Proof-of-Work Link">
+          <button id="openGhostModeBtn" type="button" class="mono-btn-outline px-2.5 sm:px-3 py-1.5 rounded-sm text-xs mono" title="Generate Public Proof-of-Work Link">
             <span>GHOST</span>
-            <span class="text-[10px] opacity-70">🔗</span>
           </button>
 
           <!-- Quick Command Palette Trigger -->
@@ -178,16 +184,106 @@
           </button>
         </div>
       </div>
-
-      <!-- Segmented Navigation Bar with 5 Modules -->
-      <nav class="flex items-center overflow-x-auto scrollbar-none rounded-sm p-1 mono-subtle text-xs font-medium gap-1 -mx-1 sm:mx-0">
-        <button id="tabAllBtn" class="px-3 py-1.5 rounded-sm mono-btn-primary whitespace-nowrap shrink-0 text-center" type="button">Dashboard</button>
-        <button id="tabVaultBtn" class="px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center" type="button">Vault &amp; ROI</button>
-        <button id="tabIntegrationsBtn" class="px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center" type="button">Ecosystem Hub</button>
-        <button id="tabScorecardBtn" class="px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center" type="button">Scorecard</button>
-        <button id="tabLaunchBtn" class="px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center" type="button">Launch &amp; PWA</button>
-      </nav>
     </header>
+
+    <!-- CLAUDE-STYLE SLIDE-OUT SIDEBAR DRAWER & BACKDROP -->
+    <div id="sidebarBackdrop" class="hidden fixed inset-0 z-40 bg-black/60 transition-opacity"></div>
+    <aside id="sidebarDrawer" class="fixed top-0 left-0 bottom-0 z-50 w-72 sm:w-80 max-w-[85vw] mono-card border-r divider flex flex-col justify-between p-4 sm:p-5 transform -translate-x-full transition-transform duration-200 ease-in-out shadow-2xl">
+      <div class="space-y-5">
+        <!-- Sidebar Header with Close Button -->
+        <div class="flex items-center justify-between pb-3 border-b divider">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 flex items-center justify-center mono-btn-primary font-bold mono text-xs tracking-tighter rounded-sm">
+              M//F
+            </div>
+            <div>
+              <h2 class="text-sm font-semibold tracking-tight">MONOFLOW</h2>
+              <p class="text-[10px] muted-text mono">Workspace Navigation</p>
+            </div>
+          </div>
+          <button id="closeSidebarBtn" type="button" class="mono-btn-outline w-7 h-7 rounded-sm flex items-center justify-center text-xs mono" aria-label="Close Sidebar">
+            ✕
+          </button>
+        </div>
+
+        <!-- Vertical Menu Items with Descriptive Badges -->
+        <div class="space-y-1.5 text-xs">
+          <p class="text-[10px] uppercase tracking-wider muted-text mono px-2 pb-1">Modules</p>
+
+          <button id="tabAllBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-primary flex items-center justify-between text-left transition-colors">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="mono text-[11px] opacity-80 shrink-0">01 //</span>
+              <div>
+                <p class="font-medium">Dashboard</p>
+                <p class="text-[10px] opacity-75">Rituals, Ledger &amp; Bonsai</p>
+              </div>
+            </div>
+            <span class="mono text-[10px] opacity-75">&rarr;</span>
+          </button>
+
+          <button id="tabVaultBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="mono text-[11px] muted-text shrink-0">02 //</span>
+              <div>
+                <p class="font-medium">Vault &amp; ROI</p>
+                <p class="text-[10px] muted-text">48h Impulse &amp; Friction Tax</p>
+              </div>
+            </div>
+            <span class="mono text-[10px] muted-text">&rarr;</span>
+          </button>
+
+          <button id="tabIntegrationsBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="mono text-[11px] muted-text shrink-0">03 //</span>
+              <div>
+                <p class="font-medium">Ecosystem Hub</p>
+                <p class="text-[10px] muted-text">Gemini, Spotify, Notion, Slack</p>
+              </div>
+            </div>
+            <span class="mono text-[10px] muted-text">&rarr;</span>
+          </button>
+
+          <button id="tabScorecardBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="mono text-[11px] muted-text shrink-0">04 //</span>
+              <div>
+                <p class="font-medium">Scorecard</p>
+                <p class="text-[10px] muted-text">Receipt &amp; Ghost Mode Link</p>
+              </div>
+            </div>
+            <span class="mono text-[10px] muted-text">&rarr;</span>
+          </button>
+
+          <button id="tabLaunchBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="mono text-[11px] muted-text shrink-0">05 //</span>
+              <div>
+                <p class="font-medium">Launch &amp; PWA</p>
+                <p class="text-[10px] muted-text">Export, Offline &amp; Deploy</p>
+              </div>
+            </div>
+            <span class="mono text-[10px] muted-text">&rarr;</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Sidebar Footer Quick Stats & Links -->
+      <div class="pt-4 border-t divider space-y-2 text-xs">
+        <div class="p-2.5 rounded-sm mono-subtle space-y-1">
+          <div class="flex items-center justify-between text-[11px] mono">
+            <span class="muted-text">Active Habits:</span>
+            <strong id="sidebarHabitsCountLabel">4 rituals</strong>
+          </div>
+          <div class="flex items-center justify-between text-[11px] mono">
+            <span class="muted-text">Saved by Waiting:</span>
+            <strong id="sidebarSavedLabel">₹3,400</strong>
+          </div>
+        </div>
+        <p class="text-[10px] mono muted-text text-center pt-1">
+          MONOFLOW v1.6 • Local-First Studio
+        </p>
+      </div>
+    </aside>
 
     <!-- Toast Notification Banner -->
     <div id="statusToast" class="hidden mt-4 px-4 py-2.5 rounded-sm mono-subtle flex items-center justify-between text-xs mono">
@@ -762,7 +858,7 @@
           <div>
             <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b divider">
               <div class="flex items-center gap-2">
-                <span class="w-6 h-6 rounded-sm mono-btn-primary flex items-center justify-center text-xs font-bold mono">✦</span>
+                <div class="w-6 h-6 rounded-sm mono-btn-primary flex items-center justify-center text-[10px] font-bold mono">AI</div>
                 <div>
                   <h3 class="text-sm font-semibold">Google Gemini Coach</h3>
                   <p class="text-[10px] muted-text mono">Live Behavioral Feedback</p>
@@ -787,7 +883,6 @@
 
             <div class="mt-3.5 p-3.5 rounded-sm mono-subtle border border-current/10">
               <div class="flex items-start gap-2.5">
-                <span class="text-xs shrink-0 mt-0.5">✦</span>
                 <p id="geminiDigestOutput" class="text-xs leading-relaxed">
                   Select a coaching mode above or ask a question below to analyze your live streaks and spending balance.
                 </p>
@@ -1489,7 +1584,27 @@
       renderProjectionChart();
     }
 
-    // --- VIEW NAVIGATION ---
+    // --- VIEW NAVIGATION & SIDEBAR CONTROLS ---
+    function openSidebar() {
+      const drawer = document.getElementById('sidebarDrawer');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (drawer) drawer.classList.remove('-translate-x-full');
+      if (backdrop) backdrop.classList.remove('hidden');
+
+      // Update quick stats in sidebar
+      const habitCount = document.getElementById('sidebarHabitsCountLabel');
+      const savedCount = document.getElementById('sidebarSavedLabel');
+      if (habitCount) habitCount.textContent = state.habits.length + ' rituals';
+      if (savedCount) savedCount.textContent = '₹' + (Number(state.moneySavedTotal) || 0).toLocaleString('en-IN');
+    }
+
+    function closeSidebar() {
+      const drawer = document.getElementById('sidebarDrawer');
+      const backdrop = document.getElementById('sidebarBackdrop');
+      if (drawer) drawer.classList.add('-translate-x-full');
+      if (backdrop) backdrop.classList.add('hidden');
+    }
+
     function applyTab() {
       const dashboardView = document.getElementById('dashboardView');
       const vaultView = document.getElementById('vaultView');
@@ -1502,6 +1617,7 @@
       const tabIntegrationsBtn = document.getElementById('tabIntegrationsBtn');
       const tabScorecardBtn = document.getElementById('tabScorecardBtn');
       const tabLaunchBtn = document.getElementById('tabLaunchBtn');
+      const currentIndicator = document.getElementById('currentViewIndicator');
 
       dashboardView.classList.add('hidden');
       if (vaultView) vaultView.classList.add('hidden');
@@ -1509,35 +1625,45 @@
       if (scorecardView) scorecardView.classList.add('hidden');
       if (launchView) launchView.classList.add('hidden');
 
-      tabAllBtn.className = 'px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center';
-      if (tabVaultBtn) tabVaultBtn.className = 'px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center';
-      tabIntegrationsBtn.className = 'px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center';
-      if (tabScorecardBtn) tabScorecardBtn.className = 'px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center';
-      if (tabLaunchBtn) tabLaunchBtn.className = 'px-3 py-1.5 rounded-sm whitespace-nowrap shrink-0 text-center';
+      const inactiveClass = 'w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current';
+      const activeClass = 'w-full p-2.5 rounded-sm mono-btn-primary flex items-center justify-between text-left transition-colors';
+
+      tabAllBtn.className = inactiveClass;
+      if (tabVaultBtn) tabVaultBtn.className = inactiveClass;
+      tabIntegrationsBtn.className = inactiveClass;
+      if (tabScorecardBtn) tabScorecardBtn.className = inactiveClass;
+      if (tabLaunchBtn) tabLaunchBtn.className = inactiveClass;
 
       if (state.activeTab === 'vault' && vaultView) {
         vaultView.classList.remove('hidden');
-        if (tabVaultBtn) tabVaultBtn.className = 'px-3 py-1.5 rounded-sm mono-btn-primary whitespace-nowrap shrink-0 text-center';
+        if (tabVaultBtn) tabVaultBtn.className = activeClass;
+        if (currentIndicator) currentIndicator.textContent = 'VAULT & ROI';
         renderCooldownVault();
         renderHabitRoiList();
       } else if (state.activeTab === 'integrations') {
         integrationsView.classList.remove('hidden');
-        tabIntegrationsBtn.className = 'px-3 py-1.5 rounded-sm mono-btn-primary whitespace-nowrap shrink-0 text-center';
+        tabIntegrationsBtn.className = activeClass;
+        if (currentIndicator) currentIndicator.textContent = 'ECOSYSTEM HUB';
         renderNotionAndSlackPreviews();
       } else if (state.activeTab === 'scorecard' && scorecardView) {
         scorecardView.classList.remove('hidden');
-        if (tabScorecardBtn) tabScorecardBtn.className = 'px-3 py-1.5 rounded-sm mono-btn-primary whitespace-nowrap shrink-0 text-center';
+        if (tabScorecardBtn) tabScorecardBtn.className = activeClass;
+        if (currentIndicator) currentIndicator.textContent = 'SCORECARD';
         renderScorecardAndSync();
         renderGhostProofCard();
       } else if (state.activeTab === 'launch' && launchView) {
         launchView.classList.remove('hidden');
-        if (tabLaunchBtn) tabLaunchBtn.className = 'px-3 py-1.5 rounded-sm mono-btn-primary whitespace-nowrap shrink-0 text-center';
+        if (tabLaunchBtn) tabLaunchBtn.className = activeClass;
+        if (currentIndicator) currentIndicator.textContent = 'LAUNCH & PWA';
         renderLaunchCenter();
       } else {
         dashboardView.classList.remove('hidden');
-        tabAllBtn.className = 'px-3 py-1.5 rounded-sm mono-btn-primary whitespace-nowrap shrink-0 text-center';
+        tabAllBtn.className = activeClass;
+        if (currentIndicator) currentIndicator.textContent = 'DASHBOARD';
         renderCharts();
       }
+
+      closeSidebar();
     }
 
     // --- HABITS ---
@@ -1587,14 +1713,16 @@
           if (habit.scheduleTime) {
             const timeBadge = document.createElement('span');
             timeBadge.className = 'mono text-[10px] px-1.5 py-0.5 rounded-sm mono-subtle hidden sm:inline-block';
-            timeBadge.textContent = '⏰ ' + habit.scheduleTime;
+            timeBadge.textContent = '@ ' + habit.scheduleTime;
             right.appendChild(timeBadge);
           }
 
           const notifBtn = document.createElement('button');
           notifBtn.type = 'button';
-          notifBtn.className = habit.notifyEnabled ? 'text-xs px-1 hover:scale-110 transition-transform' : 'text-xs px-1 opacity-35 hover:scale-110 transition-transform';
-          notifBtn.textContent = habit.notifyEnabled ? '🔔' : '🔕';
+          notifBtn.className = habit.notifyEnabled
+            ? 'mono text-[10px] px-1.5 py-0.5 rounded-sm mono-subtle hover:border-current'
+            : 'mono text-[10px] px-1.5 py-0.5 rounded-sm mono-subtle opacity-40 hover:border-current';
+          notifBtn.textContent = habit.notifyEnabled ? 'NOTIF: ON' : 'NOTIF: OFF';
           notifBtn.setAttribute('aria-label', (habit.notifyEnabled ? 'Disable' : 'Enable') + ' notifications for ' + habit.name);
           notifBtn.title = habit.notifyEnabled ? 'Notifications enabled (Click to mute)' : 'Notifications muted (Click to enable)';
           notifBtn.addEventListener('click', () => {
@@ -2833,20 +2961,20 @@
 
     // --- NOTIFICATION ENGINE FOR SCHEDULED TASKS & RITUALS ---
     function updateGlobalNotifUI() {
-      const icon = document.getElementById('globalNotifIcon');
+      const dot = document.getElementById('globalNotifDot');
       const label = document.getElementById('globalNotifLabel');
       const btn = document.getElementById('globalNotifToggleBtn');
-      if (!icon || !label || !btn) return;
+      if (!label || !btn) return;
 
       const isGranted = window.Notification && Notification.permission === 'granted';
       const isEnabled = state.notificationsEnabled && isGranted;
 
       if (isEnabled) {
-        icon.textContent = '🔔';
+        if (dot) dot.className = 'w-2 h-2 rounded-full bg-current inline-block';
         label.textContent = 'ALERTS ON';
         btn.className = 'mono-btn-primary px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5';
       } else {
-        icon.textContent = '🔕';
+        if (dot) dot.className = 'w-2 h-2 rounded-full border border-current inline-block';
         label.textContent = 'ALERTS OFF';
         btn.className = 'mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5';
       }
@@ -2888,7 +3016,7 @@
 
     function sendSystemNotification(title, body) {
       // 1. In-App Notification Toast
-      showToast('🔔 ' + title + ': ' + body);
+      showToast(title + ': ' + body);
 
       // 2. Native OS / Browser Notification (if granted & enabled)
       if (window.Notification && Notification.permission === 'granted' && state.notificationsEnabled) {
@@ -2973,6 +3101,11 @@
         saveState();
         applyTheme();
       });
+
+      // Claude-style Sidebar Toggle Listeners
+      document.getElementById('sidebarToggleBtn').addEventListener('click', openSidebar);
+      document.getElementById('closeSidebarBtn').addEventListener('click', closeSidebar);
+      document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebar);
 
       document.getElementById('tabAllBtn').addEventListener('click', () => {
         state.activeTab = 'dashboard';
@@ -3451,8 +3584,9 @@
           e.preventDefault();
           if (cmdModal.classList.contains('hidden')) openCmdModal();
           else closeCmdModal();
-        } else if (e.key === 'Escape' && !cmdModal.classList.contains('hidden')) {
-          closeCmdModal();
+        } else if (e.key === 'Escape') {
+          if (!cmdModal.classList.contains('hidden')) closeCmdModal();
+          closeSidebar();
         }
       });
 
