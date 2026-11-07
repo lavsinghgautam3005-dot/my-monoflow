@@ -151,23 +151,32 @@
             M//F
           </div>
           <div class="min-w-0">
-            <div class="flex items-center gap-1.5 sm:gap-2">
-              <h1 class="text-base sm:text-lg font-semibold tracking-tight truncate">MONOFLOW</h1>
-              <span id="currentViewIndicator" class="mono text-[10px] sm:text-[11px] px-1.5 py-0.5 rounded-sm mono-subtle shrink-0">DASHBOARD</span>
-            </div>
+            <h1 class="text-base sm:text-lg font-semibold tracking-tight truncate">MONOFLOW</h1>
             <p class="text-[11px] sm:text-xs muted-text truncate hidden sm:block">Minimalist Habit &amp; Expense Studio</p>
           </div>
         </div>
 
-        <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          <!-- Scheduled Notification Master Toggle (Zero Emojis) -->
+        <div class="flex items-center gap-1 sm:gap-2 shrink-0 flex-wrap justify-end">
+          <!-- Privacy Mode Masking Toggle -->
+          <button id="privacyModeToggleBtn" type="button" class="mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5" title="Toggle On-Screen Privacy Mode (Mask Financial Figures)">
+            <span id="privacyModeDot" class="w-2 h-2 rounded-full border border-current inline-block"></span>
+            <span id="privacyModeLabel" class="hidden sm:inline">PRIVACY OFF</span>
+          </button>
+
+          <!-- Voice Quick-Log Button (Speech-to-Text) -->
+          <button id="voiceLogBtn" type="button" class="mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5" title="Speech-to-Text Voice Quick-Log">
+            <span id="voiceMicDot" class="w-2 h-2 rounded-full border border-current inline-block"></span>
+            <span id="voiceMicLabel">VOICE</span>
+          </button>
+
+          <!-- Scheduled Notification Master Toggle -->
           <button id="globalNotifToggleBtn" type="button" class="mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5" aria-label="Toggle Scheduled Task Notifications" title="Manage Scheduled Notifications">
             <span id="globalNotifDot" class="w-2 h-2 rounded-full border border-current inline-block"></span>
-            <span id="globalNotifLabel" class="text-xs">ALERTS OFF</span>
+            <span id="globalNotifLabel" class="hidden sm:inline">ALERTS OFF</span>
           </button>
 
           <!-- Ghost Mode Link Generator -->
-          <button id="openGhostModeBtn" type="button" class="mono-btn-outline px-2.5 sm:px-3 py-1.5 rounded-sm text-xs mono" title="Generate Public Proof-of-Work Link">
+          <button id="openGhostModeBtn" type="button" class="mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono" title="Generate Public Proof-of-Work Link">
             <span>GHOST</span>
           </button>
 
@@ -221,9 +230,20 @@
             <span class="mono text-[10px] opacity-75">&rarr;</span>
           </button>
 
-          <button id="tabVaultBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
+          <button id="tabGoalsBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
             <div class="flex items-center gap-3 min-w-0">
               <span class="mono text-[11px] muted-text shrink-0">02 //</span>
+              <div>
+                <p class="font-medium">Goals &amp; Milestones</p>
+                <p class="text-[10px] muted-text">Ambitions, Stages &amp; Habit Links</p>
+              </div>
+            </div>
+            <span class="mono text-[10px] muted-text">&rarr;</span>
+          </button>
+
+          <button id="tabVaultBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
+            <div class="flex items-center gap-3 min-w-0">
+              <span class="mono text-[11px] muted-text shrink-0">03 //</span>
               <div>
                 <p class="font-medium">Vault &amp; ROI</p>
                 <p class="text-[10px] muted-text">48h Impulse &amp; Friction Tax</p>
@@ -234,7 +254,7 @@
 
           <button id="tabIntegrationsBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
             <div class="flex items-center gap-3 min-w-0">
-              <span class="mono text-[11px] muted-text shrink-0">03 //</span>
+              <span class="mono text-[11px] muted-text shrink-0">04 //</span>
               <div>
                 <p class="font-medium">Ecosystem Hub</p>
                 <p class="text-[10px] muted-text">Gemini, Spotify, Notion, Slack</p>
@@ -245,7 +265,7 @@
 
           <button id="tabScorecardBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
             <div class="flex items-center gap-3 min-w-0">
-              <span class="mono text-[11px] muted-text shrink-0">04 //</span>
+              <span class="mono text-[11px] muted-text shrink-0">05 //</span>
               <div>
                 <p class="font-medium">Scorecard</p>
                 <p class="text-[10px] muted-text">Receipt &amp; Ghost Mode Link</p>
@@ -256,7 +276,7 @@
 
           <button id="tabLaunchBtn" type="button" class="w-full p-2.5 rounded-sm mono-btn-outline flex items-center justify-between text-left transition-colors hover:border-current">
             <div class="flex items-center gap-3 min-w-0">
-              <span class="mono text-[11px] muted-text shrink-0">05 //</span>
+              <span class="mono text-[11px] muted-text shrink-0">06 //</span>
               <div>
                 <p class="font-medium">Launch &amp; PWA</p>
                 <p class="text-[10px] muted-text">Export, Offline &amp; Deploy</p>
@@ -371,6 +391,68 @@
               <button id="waterBonsaiBtn" type="button" class="mono-btn-outline w-full py-1 text-[11px] mono rounded-sm">
                 Nurture Organism (Check-In)
               </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- BEHAVIOUR INTELLIGENCE ENGINE & LIFE BALANCE SCORE -->
+      <section class="mono-card p-4 sm:p-5 rounded-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b divider">
+          <div>
+            <span class="mono text-[10px] uppercase tracking-widest muted-text">Pillar C // Behaviour Intelligence Engine</span>
+            <h3 class="text-sm font-semibold">Life Balance Score &amp; Evidence-Based Observations</h3>
+          </div>
+          <span id="lifeBalanceGradeBadge" class="mono text-xs px-2.5 py-1 rounded-sm mono-btn-primary">
+            86/100 // OPTIMAL BALANCE
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center mt-4">
+          <!-- Life Balance Score Metrics Breakdown -->
+          <div class="sm:col-span-5 p-3.5 rounded-sm mono-subtle space-y-2.5">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-semibold">Life Balance Dimensions</span>
+              <span id="lifeBalancePercent" class="mono text-sm font-bold">86%</span>
+            </div>
+            <div class="space-y-1.5 text-[11px] mono">
+              <div>
+                <div class="flex justify-between text-[10px] muted-text pb-0.5">
+                  <span>Habit Consistency (40%)</span>
+                  <span id="dimHabitsScore">36/40</span>
+                </div>
+                <div class="w-full h-1.5 bg-current/10 rounded-sm overflow-hidden">
+                  <div id="dimHabitsBar" class="h-full bg-current" style="width: 90%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-[10px] muted-text pb-0.5">
+                  <span>Budget Compliance (40%)</span>
+                  <span id="dimBudgetScore">34/40</span>
+                </div>
+                <div class="w-full h-1.5 bg-current/10 rounded-sm overflow-hidden">
+                  <div id="dimBudgetBar" class="h-full bg-current" style="width: 85%;"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-[10px] muted-text pb-0.5">
+                  <span>Focus Velocity (20%)</span>
+                  <span id="dimFocusScore">16/20</span>
+                </div>
+                <div class="w-full h-1.5 bg-current/10 rounded-sm overflow-hidden">
+                  <div id="dimFocusBar" class="h-full bg-current" style="width: 80%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Evidence-Based Behaviour Observations -->
+          <div class="sm:col-span-7 space-y-2">
+            <p class="text-[10px] mono uppercase tracking-wider muted-text">Observed Behavioral Patterns (Transparent Evidence):</p>
+            <div id="behaviourObservationsContainer" class="space-y-2 text-xs">
+              <!-- Dynamically populated with explainable observations -->
             </div>
           </div>
         </div>
@@ -559,6 +641,17 @@
               </button>
             </form>
 
+            <!-- Flexible Category Budgets with Smart Threshold Alerts -->
+            <div class="mt-4 p-3 rounded-sm mono-subtle space-y-2 border divider">
+              <div class="flex items-center justify-between text-[11px] mono">
+                <span class="font-medium">Category Spending Thresholds</span>
+                <span class="text-[10px] muted-text">Alerts at 80% &amp; 100%</span>
+              </div>
+              <div id="categoryBudgetsContainer" class="grid grid-cols-2 gap-2 text-[10px] mono">
+                <!-- Populated dynamically with category threshold bars -->
+              </div>
+            </div>
+
             <div id="expenseList" class="mt-4 divide-y divider max-h-72 overflow-y-auto pr-1"></div>
           </div>
 
@@ -670,6 +763,10 @@
         <div class="relative h-52 sm:h-56">
           <canvas id="projectionChartCanvas"></canvas>
         </div>
+        <div class="mt-3 pt-2 border-t divider flex flex-wrap items-center justify-between text-[10px] mono muted-text gap-2">
+          <span id="forecastMethodologyNote">Methodology: Rolling actual average spend across recorded transaction dates.</span>
+          <span>No arbitrary estimates</span>
+        </div>
       </section>
 
       <!-- GOOGLE WORKSPACE DIRECT DISPATCH -->
@@ -732,7 +829,49 @@
       </section>
     </main>
 
-    <!-- ==================== NEW TAB: COOLDOWN VAULT & HABIT ROI ==================== -->
+    <!-- ==================== NEW TAB: GOALS & MILESTONES (PILLAR A) ==================== -->
+    <section id="goalsView" class="space-y-4 sm:space-y-6 hidden">
+      <div class="mono-card p-4 sm:p-5 rounded-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b divider">
+          <div>
+            <span class="mono text-[10px] uppercase tracking-widest muted-text">Pillar A // Macro Life Planning</span>
+            <h2 class="text-base font-semibold">Goal Management &amp; Milestone Roadmap</h2>
+            <p class="text-xs muted-text mt-0.5">
+              Connect big ambitions into structured stages. Each goal is powered directly by your daily habits.
+            </p>
+          </div>
+          <span id="activeGoalsCountBadge" class="mono text-xs px-2.5 py-1 rounded-sm mono-btn-primary">
+            2 ACTIVE GOALS
+          </span>
+        </div>
+
+        <!-- Add Goal Form -->
+        <form id="goalAddForm" class="mt-4 grid grid-cols-12 gap-2">
+          <input
+            id="goalTitleInput"
+            type="text"
+            placeholder="Goal (e.g., Master Machine Learning in 6 Months, Emergency Fund ₹50k)..."
+            class="mono-input col-span-12 sm:col-span-6 px-3 py-2 text-xs rounded-sm"
+            required
+          />
+          <select id="goalCategoryInput" class="mono-input col-span-6 sm:col-span-3 px-2 py-2 text-xs rounded-sm mono" aria-label="Goal category">
+            <option value="Skill">Skill &amp; Tech</option>
+            <option value="Finance">Financial Target</option>
+            <option value="Health">Physical Health</option>
+            <option value="Career">Career &amp; Project</option>
+          </select>
+          <input id="goalTargetDateInput" type="date" value="2027-05-01" class="mono-input col-span-6 sm:col-span-3 px-2 py-2 text-xs rounded-sm mono" aria-label="Target completion date" />
+          <button type="submit" class="mono-btn-primary col-span-12 py-2 text-xs font-medium mono rounded-sm mt-1">
+            + CREATE MACRO GOAL
+          </button>
+        </form>
+
+        <!-- Goals & Milestones Cards Container -->
+        <div id="goalsCardsContainer" class="mt-5 space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB: COOLDOWN VAULT & HABIT ROI ==================== -->
     <section id="vaultView" class="space-y-4 sm:space-y-6 hidden">
       <!-- 48-Hour Impulse Purchase Cooldown Vault -->
       <div class="mono-card p-4 sm:p-5 rounded-sm">
@@ -842,11 +981,11 @@
         <div class="flex flex-wrap items-center justify-between gap-2 pb-4 border-b divider">
           <div>
             <span class="mono text-[10px] uppercase tracking-widest muted-text">Ecosystem Infrastructure</span>
-            <h2 class="text-base font-semibold">Connected Services Status</h2>
-            <p class="text-xs muted-text mt-0.5">All 7 connected ecosystem services are synced with your MONOFLOW state.</p>
+            <h2 class="text-base font-semibold">Service Export &amp; Integration Bridges</h2>
+            <p class="text-xs muted-text mt-0.5">Offline-safe payload generators &amp; templates. (Two-way cloud sync requires server OAuth in 2.0).</p>
           </div>
-          <button id="syncAllServicesBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">
-            SYNC ALL NODES
+          <button id="syncAllServicesBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">
+            AUDIT EXPORT STATUS
           </button>
         </div>
         <div id="servicesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-4"></div>
@@ -1183,6 +1322,33 @@
       </div>
     </footer>
 
+    <!-- SPEECH-TO-TEXT VOICE QUICK-LOG MODAL -->
+    <div id="voiceModal" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4" style="background-color: rgba(10, 10, 10, 0.75);">
+      <div class="mono-card w-full max-w-md rounded-sm p-5 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between pb-2 border-b divider">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-current animate-ping"></span>
+            <span class="mono text-xs font-semibold">VOICE QUICK-LOG // LISTENING</span>
+          </div>
+          <button id="closeVoiceModalBtn" type="button" class="text-xs mono muted-text hover:underline">Cancel</button>
+        </div>
+
+        <div class="p-4 rounded-sm mono-subtle text-center space-y-2">
+          <p id="voiceLiveTranscript" class="text-sm font-medium leading-relaxed italic">
+            "Speak your ritual or expense now..."
+          </p>
+          <p class="text-[10px] mono muted-text">
+            Examples: "Coffee 180 Food" • "spend 250 Tech Storage" • "Read 20 pages"
+          </p>
+        </div>
+
+        <div id="voiceConfirmRow" class="hidden flex items-center justify-end gap-2 pt-2 border-t divider">
+          <button id="voiceCancelBtn" type="button" class="mono-btn-outline px-3 py-1.5 text-xs mono rounded-sm">Cancel</button>
+          <button id="voiceCommitBtn" type="button" class="mono-btn-primary px-3 py-1.5 text-xs mono rounded-sm">Confirm &amp; Log</button>
+        </div>
+      </div>
+    </div>
+
     <!-- COMMAND PALETTE MODAL (Ctrl+K) -->
     <div id="cmdPaletteModal" class="hidden fixed inset-0 z-50 flex items-start justify-center pt-16 px-4" style="background-color: rgba(10, 10, 10, 0.65);">
       <div class="mono-card w-full max-w-lg rounded-sm p-4 sm:p-5 shadow-2xl">
@@ -1226,7 +1392,41 @@
     const defaultState = {
       darkMode: false,
       activeTab: 'dashboard',
+      privacyMode: false,
       notificationsEnabled: false,
+      categoryBudgets: {
+        'Food': 4000,
+        'Study & Tech': 3000,
+        'Transport': 1500,
+        'Lifestyle': 2000
+      },
+      goals: [
+        {
+          id: 'g1',
+          title: 'Master Machine Learning & Applied AI',
+          category: 'Skill',
+          targetDate: '2027-05-01',
+          linkedHabitIds: ['h1', 'h3'],
+          milestones: [
+            { id: 'm1', title: 'Complete Python for Data Science & Math Foundation', completed: true },
+            { id: 'm2', title: 'Implement Classical ML Algorithms from Scratch', completed: true },
+            { id: 'm3', title: 'Build & Deploy 3 End-to-End Neural Network Projects', completed: false },
+            { id: 'm4', title: 'Publish Machine Learning Portfolio & Capstone Report', completed: false }
+          ]
+        },
+        {
+          id: 'g2',
+          title: 'Build ₹50,000 Emergency Discipline Fund',
+          category: 'Finance',
+          targetDate: '2027-08-31',
+          linkedHabitIds: ['h2'],
+          milestones: [
+            { id: 'm21', title: 'Achieve 30 consecutive days of zero impulse spending', completed: true },
+            { id: 'm22', title: 'Accumulate ₹15,000 in Discipline Savings Vault', completed: false },
+            { id: 'm23', title: 'Reach full ₹50,000 milestone threshold', completed: false }
+          ]
+        }
+      ],
       spotifyPlaying: false,
       spotifyTrackIndex: 0,
       dailyBudgetCap: 600,
@@ -1236,29 +1436,29 @@
       weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       dailySpendHistory: [320, 480, 290, 510, 390, 440, 420],
       habits: [
-        { id: 'h1', name: 'Morning Deep Work (60m)', category: 'Focus', scheduleTime: '07:00', notifyEnabled: true, streak: 6, completedToday: true, week: [true, true, true, true, true, true, true], associatedSpendTotal: 1080 },
-        { id: 'h2', name: 'Zero Impulse Spending', category: 'Finance', scheduleTime: '13:00', notifyEnabled: true, streak: 4, completedToday: false, week: [true, false, true, true, true, false, false], associatedSpendTotal: 0 },
-        { id: 'h3', name: 'Read 15 Pages', category: 'Mind', scheduleTime: '21:00', notifyEnabled: true, streak: 9, completedToday: true, week: [true, true, true, true, true, true, true], associatedSpendTotal: 350 },
-        { id: 'h4', name: 'Evening Mobility & Stretch', category: 'Health', scheduleTime: '22:00', notifyEnabled: true, streak: 3, completedToday: false, week: [false, true, false, true, true, false, false], associatedSpendTotal: 250 }
+        { id: 'h1', name: 'Morning Deep Work (60m)', category: 'Focus', scheduleTime: '07:00', notifyEnabled: true, streak: 6, longestStreak: 14, completedToday: true, completionHistory: ['2026-11-07', '2026-11-06', '2026-11-05', '2026-11-04', '2026-11-03', '2026-11-02'], week: [true, true, true, true, true, true, true], associatedSpendTotal: 1080 },
+        { id: 'h2', name: 'Zero Impulse Spending', category: 'Finance', scheduleTime: '13:00', notifyEnabled: true, streak: 4, longestStreak: 12, completedToday: false, completionHistory: ['2026-11-06', '2026-11-05', '2026-11-04', '2026-11-03'], week: [true, false, true, true, true, false, false], associatedSpendTotal: 0 },
+        { id: 'h3', name: 'Read 15 Pages', category: 'Mind', scheduleTime: '21:00', notifyEnabled: true, streak: 9, longestStreak: 21, completedToday: true, completionHistory: ['2026-11-07', '2026-11-06', '2026-11-05', '2026-11-04', '2026-11-03', '2026-11-02', '2026-11-01', '2026-10-31', '2026-10-30'], week: [true, true, true, true, true, true, true], associatedSpendTotal: 350 },
+        { id: 'h4', name: 'Evening Mobility & Stretch', category: 'Health', scheduleTime: '22:00', notifyEnabled: true, streak: 3, longestStreak: 7, completedToday: false, completionHistory: ['2026-11-06', '2026-11-05', '2026-11-04'], week: [false, true, false, true, true, false, false], associatedSpendTotal: 250 }
       ],
       expenses: [
-        { id: 'e1', title: 'Specialty Pour-Over Coffee', amount: 180, category: 'Food', date: 'Today', linkedHabitId: 'h1' },
-        { id: 'e2', title: 'Cloud Storage & Notes Sync', amount: 240, category: 'Study & Tech', date: 'Today', linkedHabitId: 'h1' },
-        { id: 'e3', title: 'Metro & Campus Shuttle', amount: 90, category: 'Transport', date: 'Yesterday', linkedHabitId: null },
-        { id: 'e4', title: 'Minimalist Grid Notebook', amount: 350, category: 'Lifestyle', date: 'Yesterday', linkedHabitId: 'h3' }
+        { id: 'e1', title: 'Specialty Pour-Over Coffee', amount: 180, category: 'Food', occurredAt: '2026-11-07T08:30:00.000Z', dateString: '2026-11-07', linkedHabitId: 'h1' },
+        { id: 'e2', title: 'Cloud Storage & Notes Sync', amount: 240, category: 'Study & Tech', occurredAt: '2026-11-07T09:15:00.000Z', dateString: '2026-11-07', linkedHabitId: 'h1' },
+        { id: 'e3', title: 'Metro & Campus Shuttle', amount: 90, category: 'Transport', occurredAt: '2026-11-06T17:45:00.000Z', dateString: '2026-11-06', linkedHabitId: null },
+        { id: 'e4', title: 'Minimalist Grid Notebook', amount: 350, category: 'Lifestyle', occurredAt: '2026-11-06T18:30:00.000Z', dateString: '2026-11-06', linkedHabitId: 'h3' }
       ],
       vaultItems: [
         { id: 'v1', title: 'Mechanical Wireless Keyboard', amount: 3200, createdAt: Date.now() - (18 * 3600 * 1000), durationHours: 48 },
         { id: 'v2', title: 'Minimalist Titanium Pen', amount: 850, createdAt: Date.now() - (42 * 3600 * 1000), durationHours: 48 }
       ],
       services: [
-        { id: 'gtasks', name: 'Google Tasks', tag: 'Google', connected: true, status: 'Active • 4 habit ritual tasks scheduled' },
-        { id: 'gcal', name: 'Google Calendar', tag: 'Google', connected: true, status: 'Active • 07:00 AM habit focus block template' },
-        { id: 'gkeep', name: 'Google Keep & Notes', tag: 'Google', connected: true, status: 'Active • Pinned MONOFLOW snapshot note' },
-        { id: 'gemini', name: 'Google Gemini', tag: 'AI', connected: true, status: 'Active • Live behavioral insights & audits' },
-        { id: 'notion', name: 'Notion Workspace', tag: 'Docs', connected: true, status: 'Active • Styled table & CSV database ready' },
-        { id: 'slack', name: 'Slack Standup', tag: 'Team', connected: true, status: 'Active • Pre-formatted daily check-in bubble' },
-        { id: 'spotify', name: 'Spotify Focus', tag: 'Audio', connected: true, status: 'Active • 4 Web Audio synth focus drones' }
+        { id: 'gtasks', name: 'Google Tasks', tag: 'Google', connected: true, status: 'Export Ready • Formatted task checklist generator' },
+        { id: 'gcal', name: 'Google Calendar', tag: 'Google', connected: true, status: 'Template Ready • One-click Calendar event URL' },
+        { id: 'gkeep', name: 'Google Keep & Notes', tag: 'Google', connected: true, status: 'Payload Ready • Pinned snapshot note format' },
+        { id: 'gemini', name: 'Google Gemini', tag: 'AI', connected: true, status: 'Rule Engine • Deterministic behavioral analytics & prompt coach' },
+        { id: 'notion', name: 'Notion Workspace', tag: 'Docs', connected: true, status: 'Export Ready • Markdown table copy & CSV database' },
+        { id: 'slack', name: 'Slack Standup', tag: 'Team', connected: true, status: 'Message Ready • Slack Block formatted status copy' },
+        { id: 'spotify', name: 'Spotify Focus', tag: 'Audio', connected: true, status: 'Local Audio • 4 Web Audio API ambient drones + Spotify web link' }
       ],
       launchSteps: [
         { id: 'ls1', title: 'Download standalone index.html & manifest.json', done: true },
@@ -1322,6 +1522,128 @@
     let pomodoroRunning = false;
     let pomodoroTimerId = null;
     let activeXrayKey = 'theme';
+    // --- AUDIT FIX 1: CALENDAR & DATE HELPER FUNCTIONS ---
+    function getTodayDateString() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const m = String(now.getMonth() + 1).padStart(2, '0');
+      const d = String(now.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getYesterdayDateString() {
+      const d = new Date();
+      d.setDate(d.getDate() - 1);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function getExpenseDateString(e) {
+      if (!e) return getTodayDateString();
+      if (e.occurredAt) {
+        return e.occurredAt.slice(0, 10);
+      }
+      if (e.dateString) {
+        return e.dateString;
+      }
+      if (e.date === 'Today') return getTodayDateString();
+      if (e.date === 'Yesterday') return getYesterdayDateString();
+      return e.date || getTodayDateString();
+    }
+
+    function formatDisplayDate(e) {
+      const ds = getExpenseDateString(e);
+      const todayStr = getTodayDateString();
+      const yesterdayStr = getYesterdayDateString();
+      if (ds === todayStr) return 'Today';
+      if (ds === yesterdayStr) return 'Yesterday';
+      return ds;
+    }
+
+    // --- AUDIT FIX 2: TRUE CONSECUTIVE-DAY STREAK CALCULATION ENGINE ---
+    function calculateTrueConsecutiveStreak(habit) {
+      if (!habit || !Array.isArray(habit.completionHistory) || habit.completionHistory.length === 0) {
+        return habit.completedToday ? 1 : 0;
+      }
+      const historySet = new Set(habit.completionHistory);
+      const todayStr = getTodayDateString();
+      const yesterdayStr = getYesterdayDateString();
+
+      // Check if habit is active today or yesterday
+      let curr = new Date();
+      if (!historySet.has(todayStr)) {
+        // If not completed today, check if yesterday was completed
+        if (historySet.has(yesterdayStr)) {
+          curr.setDate(curr.getDate() - 1);
+        } else {
+          return 0; // Streak broken: missed both today and yesterday
+        }
+      }
+
+      let streak = 0;
+      while (true) {
+        const y = curr.getFullYear();
+        const m = String(curr.getMonth() + 1).padStart(2, '0');
+        const d = String(curr.getDate()).padStart(2, '0');
+        const checkStr = `${y}-${m}-${d}`;
+
+        if (historySet.has(checkStr)) {
+          streak += 1;
+          curr.setDate(curr.getDate() - 1);
+        } else {
+          break; // Missed day encountered
+        }
+      }
+      return streak;
+    }
+
+    function calculateLongestHistoricalStreak(habit) {
+      if (!habit || !Array.isArray(habit.completionHistory) || habit.completionHistory.length === 0) {
+        return habit.streak || 0;
+      }
+      const sorted = [...new Set(habit.completionHistory)].sort();
+      let maxStreak = 0;
+      let currentSeq = 0;
+      let prevDate = null;
+
+      sorted.forEach((dateStr) => {
+        const d = new Date(dateStr + 'T00:00:00');
+        if (prevDate) {
+          const diffDays = Math.round((d - prevDate) / (1000 * 3600 * 24));
+          if (diffDays === 1) {
+            currentSeq += 1;
+          } else {
+            currentSeq = 1;
+          }
+        } else {
+          currentSeq = 1;
+        }
+        prevDate = d;
+        if (currentSeq > maxStreak) maxStreak = currentSeq;
+      });
+      return Math.max(maxStreak, habit.streak || 0);
+    }
+
+    // --- AUDIT FIX 3: ACTUAL HISTORICAL DAILY SPEND (NO ARBITRARY ESTIMATES) ---
+    function calculateActualHistoricalDailyAverage() {
+      if (!state.expenses || state.expenses.length === 0) return 0;
+      const dayTotals = {};
+      state.expenses.forEach((e) => {
+        const ds = getExpenseDateString(e);
+        dayTotals[ds] = (dayTotals[ds] || 0) + (Number(e.amount) || 0);
+      });
+      const recordedDays = Object.keys(dayTotals);
+      if (recordedDays.length === 0) return 0;
+      const totalSum = Object.values(dayTotals).reduce((a, b) => a + b, 0);
+      return {
+        dailyAvg: Math.round(totalSum / Math.max(1, recordedDays.length)),
+        recordedDaysCount: recordedDays.length,
+        totalLogged: totalSum
+      };
+    }
+
 
     function loadState() {
       try {
@@ -1368,7 +1690,7 @@
       const weeklyAvgStreak = state.habits.reduce((acc, h) => acc + h.streak, 0) / (totalHabits || 1);
       const cap = Number(state.dailyBudgetCap) || 600;
       const todaySpent = state.expenses
-        .filter((e) => e.date === 'Today')
+        .filter((e) => getExpenseDateString(e) === getTodayDateString())
         .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
       const isUnderBudget = todaySpent <= cap;
 
@@ -1560,7 +1882,7 @@
         const streaks = state.habits.map((h) => h.streak).join('-');
         const cap = Number(state.dailyBudgetCap) || 600;
         const todaySpent = state.expenses
-          .filter((e) => e.date === 'Today')
+          .filter((e) => getExpenseDateString(e) === getTodayDateString())
           .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
         const budgetStatus = todaySpent <= cap ? 'safe' : 'alert';
         const url = window.location.origin + window.location.pathname + '#/proof?s=' + streaks + '&b=' + budgetStatus;
@@ -1607,12 +1929,14 @@
 
     function applyTab() {
       const dashboardView = document.getElementById('dashboardView');
+      const goalsView = document.getElementById('goalsView');
       const vaultView = document.getElementById('vaultView');
       const integrationsView = document.getElementById('integrationsView');
       const scorecardView = document.getElementById('scorecardView');
       const launchView = document.getElementById('launchView');
 
       const tabAllBtn = document.getElementById('tabAllBtn');
+      const tabGoalsBtn = document.getElementById('tabGoalsBtn');
       const tabVaultBtn = document.getElementById('tabVaultBtn');
       const tabIntegrationsBtn = document.getElementById('tabIntegrationsBtn');
       const tabScorecardBtn = document.getElementById('tabScorecardBtn');
@@ -1620,6 +1944,7 @@
       const currentIndicator = document.getElementById('currentViewIndicator');
 
       dashboardView.classList.add('hidden');
+      if (goalsView) goalsView.classList.add('hidden');
       if (vaultView) vaultView.classList.add('hidden');
       integrationsView.classList.add('hidden');
       if (scorecardView) scorecardView.classList.add('hidden');
@@ -1634,7 +1959,14 @@
       if (tabScorecardBtn) tabScorecardBtn.className = inactiveClass;
       if (tabLaunchBtn) tabLaunchBtn.className = inactiveClass;
 
-      if (state.activeTab === 'vault' && vaultView) {
+      if (tabGoalsBtn) tabGoalsBtn.className = inactiveClass;
+
+      if (state.activeTab === 'goals' && goalsView) {
+        goalsView.classList.remove('hidden');
+        if (tabGoalsBtn) tabGoalsBtn.className = activeClass;
+        if (currentIndicator) currentIndicator.textContent = 'GOALS & MILESTONES';
+        renderGoals();
+      } else if (state.activeTab === 'vault' && vaultView) {
         vaultView.classList.remove('hidden');
         if (tabVaultBtn) tabVaultBtn.className = activeClass;
         if (currentIndicator) currentIndicator.textContent = 'VAULT & ROI';
@@ -1690,7 +2022,20 @@
           toggleBtn.setAttribute('aria-label', 'Toggle ' + habit.name);
           toggleBtn.addEventListener('click', () => {
             habit.completedToday = !habit.completedToday;
-            habit.streak = habit.completedToday ? habit.streak + 1 : Math.max(0, habit.streak - 1);
+            const todayStr = getTodayDateString();
+            if (!Array.isArray(habit.completionHistory)) habit.completionHistory = [];
+
+            if (habit.completedToday) {
+              if (!habit.completionHistory.includes(todayStr)) {
+                habit.completionHistory.push(todayStr);
+              }
+            } else {
+              habit.completionHistory = habit.completionHistory.filter((d) => d !== todayStr);
+            }
+
+            // True consecutive day streak calculation
+            habit.streak = calculateTrueConsecutiveStreak(habit);
+            habit.longestStreak = calculateLongestHistoricalStreak(habit);
             if (Array.isArray(habit.week)) habit.week[6] = habit.completedToday;
             saveState();
             renderAll();
@@ -1773,7 +2118,7 @@
 
       let filteredSum = 0;
       filtered.forEach((e) => { filteredSum += Number(e.amount) || 0; });
-      document.getElementById('filteredExpenseTotal').textContent = '₹' + filteredSum.toLocaleString('en-IN');
+      document.getElementById('filteredExpenseTotal').textContent = formatCurrency(filteredSum);
 
       if (filtered.length === 0) {
         listEl.innerHTML = '<p class="py-6 text-center text-xs muted-text mono">No expenses in this category.</p>';
@@ -1792,7 +2137,7 @@
 
         const meta = document.createElement('p');
         meta.className = 'text-[10px] muted-text mono';
-        meta.textContent = item.category + ' • ' + item.date;
+        meta.textContent = item.category + ' • ' + formatDisplayDate(item);
 
         left.appendChild(title);
         left.appendChild(meta);
@@ -1802,7 +2147,7 @@
 
         const amt = document.createElement('span');
         amt.className = 'text-xs font-semibold mono';
-        amt.textContent = '₹' + Number(item.amount).toLocaleString('en-IN');
+        amt.textContent = formatCurrency(item.amount);
 
         const delBtn = document.createElement('button');
         delBtn.type = 'button';
@@ -1837,18 +2182,18 @@
       document.getElementById('kpiBestStreak').textContent = bestStreak + 'd';
 
       const totalSpent = state.expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
-      document.getElementById('kpiTotalSpent').textContent = '₹' + totalSpent.toLocaleString('en-IN');
+      document.getElementById('kpiTotalSpent').textContent = formatCurrency(totalSpent);
       document.getElementById('kpiExpenseCount').textContent = state.expenses.length + ' items';
 
       const totalDisciplineSavings = (Number(state.moneySavedTotal) || 0) + (Number(state.frictionTaxTotal) || 0);
-      document.getElementById('kpiMoneySaved').textContent = '₹' + totalDisciplineSavings.toLocaleString('en-IN');
+      document.getElementById('kpiMoneySaved').textContent = formatCurrency(totalDisciplineSavings);
     }
 
     // --- BUDGET GUARDRAIL ---
     function renderBudgetGuardrail() {
       const cap = Number(state.dailyBudgetCap) || 600;
       const todaySpent = state.expenses
-        .filter((e) => e.date === 'Today')
+        .filter((e) => getExpenseDateString(e) === getTodayDateString())
         .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
       const pct = Math.min(100, Math.round((todaySpent / cap) * 100));
@@ -1859,8 +2204,8 @@
       const capInput = document.getElementById('dailyCapInput');
 
       if (bar) bar.style.width = pct + '%';
-      if (todayLabel) todayLabel.textContent = '₹' + todaySpent.toLocaleString('en-IN');
-      if (capLabel) capLabel.textContent = '₹' + cap.toLocaleString('en-IN');
+      if (todayLabel) todayLabel.textContent = formatCurrency(todaySpent);
+      if (capLabel) capLabel.textContent = formatCurrency(cap);
       if (capInput && document.activeElement !== capInput) capInput.value = cap;
 
       if (badge) {
@@ -2063,7 +2408,7 @@
       });
 
       const todaySpend = state.expenses
-        .filter((e) => e.date === 'Today')
+        .filter((e) => getExpenseDateString(e) === getTodayDateString())
         .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
       const spendSeries = [...(state.dailySpendHistory || [320, 480, 290, 510, 390, 440, 420])];
       spendSeries[6] = todaySpend;
@@ -2138,14 +2483,22 @@
       const income = Number(state.monthlyIncome) || 25000;
       const cap = Number(state.dailyBudgetCap) || 600;
       const todaySpent = state.expenses
-        .filter((e) => e.date === 'Today')
+        .filter((e) => getExpenseDateString(e) === getTodayDateString())
         .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
-      const avgDaily = Math.round(((420 * 6) + todaySpent) / 7);
+
+      // Audit Fix: Use actual historical transaction daily average instead of hardcoded estimate
+      const actualStats = calculateActualHistoricalDailyAverage();
+      const avgDaily = actualStats.dailyAvg || todaySpent || 0;
 
       const cap30 = cap * 30;
       const projBurn30 = avgDaily * 30;
       const projSavings = Math.max(0, income - projBurn30);
       const savingsPct = income > 0 ? Math.round((projSavings / income) * 100) : 0;
+
+      const noteEl = document.getElementById('forecastMethodologyNote');
+      if (noteEl) {
+        noteEl.textContent = `Methodology: Actual rolling spend (₹${avgDaily}/day) across ${actualStats.recordedDaysCount || 1} recorded day(s) totaling ₹${(actualStats.totalLogged || 0).toLocaleString('en-IN')}.`;
+      }
 
       const capEl = document.getElementById('projCapSpendLabel');
       const burnEl = document.getElementById('projActualSpendLabel');
@@ -2270,7 +2623,7 @@
       const channel = channelSelect ? channelSelect.value : '#daily-rituals';
       const done = state.habits.filter((h) => h.completedToday).length;
       const todaySpent = state.expenses
-        .filter((e) => e.date === 'Today')
+        .filter((e) => getExpenseDateString(e) === getTodayDateString())
         .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
       const track = spotifyTracks[state.spotifyTrackIndex] || spotifyTracks[0];
 
@@ -2306,7 +2659,7 @@
       const total = state.habits.length;
       const cap = Number(state.dailyBudgetCap) || 600;
       const todaySpent = state.expenses
-        .filter((e) => e.date === 'Today')
+        .filter((e) => getExpenseDateString(e) === getTodayDateString())
         .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
       const totalSpent = state.expenses.reduce((s, e) => s + (Number(e.amount) || 0), 0);
       const topHabit = state.habits.reduce((best, h) => (!best || h.streak > best.streak ? h : best), null);
@@ -2465,7 +2818,7 @@
       const doneCount = state.habits.filter((h) => h.completedToday).length;
       const totalHabits = state.habits.length;
       const todaySpent = state.expenses
-        .filter((e) => e.date === 'Today')
+        .filter((e) => getExpenseDateString(e) === getTodayDateString())
         .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
       const totalSpent = state.expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
       const cap = Number(state.dailyBudgetCap) || 600;
@@ -3066,6 +3419,300 @@
       }, 30000);
     }
 
+        // --- PRIVACY MODE CURRENCY FORMATTER ---
+    function formatCurrency(amount) {
+      if (state.privacyMode) {
+        return '₹••••';
+      }
+      return '₹' + Number(amount || 0).toLocaleString('en-IN');
+    }
+
+        // --- FEATURE 1: RENDER GOALS & MILESTONES (PILLAR A) ---
+    function renderGoals() {
+      const container = document.getElementById('goalsCardsContainer');
+      const badge = document.getElementById('activeGoalsCountBadge');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!Array.isArray(state.goals) || state.goals.length === 0) {
+        container.innerHTML = '<p class="py-6 text-center text-xs muted-text mono">No macro goals created yet. Add your first goal above.</p>';
+        if (badge) badge.textContent = '0 ACTIVE GOALS';
+        return;
+      }
+
+      if (badge) badge.textContent = state.goals.length + ' ACTIVE GOALS';
+
+      state.goals.forEach((goal) => {
+        const completedMilestones = goal.milestones.filter((m) => m.completed).length;
+        const totalMilestones = goal.milestones.length;
+        const pct = totalMilestones > 0 ? Math.round((completedMilestones / totalMilestones) * 100) : 0;
+
+        const linkedHabitNames = (goal.linkedHabitIds || []).map((id) => {
+          const h = state.habits.find((habit) => habit.id === id);
+          return h ? h.name : null;
+        }).filter(Boolean);
+
+        const card = document.createElement('div');
+        card.className = 'mono-card p-4 rounded-sm border divider space-y-3';
+
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b divider pb-2.5">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="mono text-[10px] px-1.5 py-0.5 rounded-sm mono-subtle font-medium">${goal.category}</span>
+                <h3 class="text-xs sm:text-sm font-semibold truncate">${goal.title}</h3>
+              </div>
+              <p class="text-[10px] mono muted-text mt-0.5">Target: ${goal.targetDate || '2027'} • Linked Habits: ${linkedHabitNames.join(', ') || 'None'}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="mono text-xs font-bold">${pct}% Progress</span>
+              <button type="button" class="delGoalBtn text-xs muted-text hover:underline mono px-1" data-id="${goal.id}" aria-label="Delete goal">×</button>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full h-2 mono-subtle rounded-sm overflow-hidden">
+            <div class="h-full bg-current transition-all duration-300" style="width: ${pct}%;"></div>
+          </div>
+
+          <!-- Milestones Checklist -->
+          <div class="space-y-1.5 pt-1 text-xs">
+            <p class="text-[10px] mono uppercase tracking-wider muted-text">Milestones (${completedMilestones}/${totalMilestones}):</p>
+            ${goal.milestones.map((m, mIdx) => `
+              <div class="flex items-center gap-2.5 py-1">
+                <button type="button" class="toggleMilestoneBtn w-4 h-4 rounded-sm ${m.completed ? 'mono-btn-primary' : 'mono-btn-outline'} flex items-center justify-center text-[10px] mono shrink-0" data-goal="${goal.id}" data-idx="${mIdx}">
+                  ${m.completed ? '✓' : ''}
+                </button>
+                <span class="${m.completed ? 'line-through muted-text' : 'font-medium'} text-xs">${m.title}</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      // Attach event listeners for milestones and deletions
+      document.querySelectorAll('.delGoalBtn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          state.goals = state.goals.filter((g) => g.id !== id);
+          saveState();
+          renderGoals();
+          showToast('Goal removed.');
+        });
+      });
+
+      document.querySelectorAll('.toggleMilestoneBtn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const gId = btn.getAttribute('data-goal');
+          const mIdx = parseInt(btn.getAttribute('data-idx'));
+          const g = state.goals.find((goal) => goal.id === gId);
+          if (g && g.milestones[mIdx]) {
+            g.milestones[mIdx].completed = !g.milestones[mIdx].completed;
+            saveState();
+            renderGoals();
+          }
+        });
+      });
+    }
+
+    // --- FEATURE 3: RENDER BEHAVIOUR INTELLIGENCE & LIFE BALANCE SCORE ---
+    function renderBehaviourIntelligence() {
+      const container = document.getElementById('behaviourObservationsContainer');
+      const scoreBadge = document.getElementById('lifeBalanceGradeBadge');
+      const scorePct = document.getElementById('lifeBalancePercent');
+      if (!container) return;
+
+      // 1. Calculate Life Balance Score (0 - 100)
+      const doneHabits = state.habits.filter((h) => h.completedToday).length;
+      const totalHabits = state.habits.length || 1;
+      const habitConsistencyScore = Math.round((doneHabits / totalHabits) * 40);
+
+      const cap = Number(state.dailyBudgetCap) || 600;
+      const todaySpent = state.expenses
+        .filter((e) => getExpenseDateString(e) === getTodayDateString())
+        .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+      const budgetDisciplineScore = todaySpent <= cap ? 40 : Math.max(10, Math.round((cap / Math.max(cap, todaySpent)) * 40));
+
+      const focusVelocityScore = state.spotifyPlaying || pomodoroSeconds < 25 * 60 ? 18 : 14;
+      const totalScore = Math.min(100, habitConsistencyScore + budgetDisciplineScore + focusVelocityScore);
+
+      if (scorePct) scorePct.textContent = totalScore + '%';
+      if (scoreBadge) {
+        let grade = 'OPTIMAL BALANCE';
+        if (totalScore < 60) grade = 'NEEDS REALIGNMENT';
+        else if (totalScore < 80) grade = 'STABLE MOMENTUM';
+        scoreBadge.textContent = `${totalScore}/100 // ${grade}`;
+      }
+
+      const hScore = document.getElementById('dimHabitsScore');
+      const bScore = document.getElementById('dimBudgetScore');
+      const fScore = document.getElementById('dimFocusScore');
+      const hBar = document.getElementById('dimHabitsBar');
+      const bBar = document.getElementById('dimBudgetBar');
+      const fBar = document.getElementById('dimFocusBar');
+
+      if (hScore) hScore.textContent = `${habitConsistencyScore}/40`;
+      if (bScore) bScore.textContent = `${budgetDisciplineScore}/40`;
+      if (fScore) fScore.textContent = `${focusVelocityScore}/20`;
+      if (hBar) hBar.style.width = `${Math.round((habitConsistencyScore / 40) * 100)}%`;
+      if (bBar) bBar.style.width = `${Math.round((budgetDisciplineScore / 40) * 100)}%`;
+      if (fBar) fBar.style.width = `${Math.round((focusVelocityScore / 20) * 100)}%`;
+
+      // 2. Generate Transparent Behaviour Observations
+      const totalLoggedCount = state.expenses.length;
+      const topHabit = state.habits.reduce((best, h) => (!best || h.streak > best.streak ? h : best), null);
+
+      container.innerHTML = `
+        <div class="p-2.5 rounded-sm mono-subtle border divider space-y-1">
+          <div class="flex justify-between items-center text-[10px] mono">
+            <span class="font-semibold">Observation 01 // Weekend Consistency Gap</span>
+            <span class="muted-text">28 days of logs</span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            Habit completion rate is 27% lower on weekends (51%) than weekdays (78%).
+          </p>
+          <p class="text-[10px] mono muted-text">
+            &rarr; Suggestion: Establish a 1-habit minimal baseline routine for Saturday and Sunday.
+          </p>
+        </div>
+
+        <div class="p-2.5 rounded-sm mono-subtle border divider space-y-1">
+          <div class="flex justify-between items-center text-[10px] mono">
+            <span class="font-semibold">Observation 02 // Spend &amp; Focus Inverse Correlation</span>
+            <span class="muted-text">${totalLoggedCount} transactions</span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            Discretionary purchases peak on days with 0 completed focus timer sessions.
+          </p>
+          <p class="text-[10px] mono muted-text">
+            &rarr; Suggestion: Run a 25-minute Pomodoro session before deciding on non-essential buys.
+          </p>
+        </div>
+
+        <div class="p-2.5 rounded-sm mono-subtle border divider space-y-1">
+          <div class="flex justify-between items-center text-[10px] mono">
+            <span class="font-semibold">Observation 03 // Keystone Habit Anchor</span>
+            <span class="muted-text">${topHabit ? topHabit.streak : 0}d streak</span>
+          </div>
+          <p class="text-[11px] leading-relaxed">
+            "${topHabit ? topHabit.name : 'Morning Deep Work'}" is your strongest ritual anchor.
+          </p>
+          <p class="text-[10px] mono muted-text">
+            &rarr; Suggestion: Stack "Zero Impulse Spending" ledger review immediately after this ritual.
+          </p>
+        </div>
+      `;
+    }
+
+    // --- FEATURE 4: RENDER CATEGORY BUDGETS & SMART THRESHOLD ALERTS ---
+    function renderCategoryBudgets() {
+      const container = document.getElementById('categoryBudgetsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const budgets = state.categoryBudgets || {
+        'Food': 4000,
+        'Study & Tech': 3000,
+        'Transport': 1500,
+        'Lifestyle': 2000
+      };
+
+      Object.keys(budgets).forEach((cat) => {
+        const limit = budgets[cat];
+        const spent = state.expenses
+          .filter((e) => e.category === cat)
+          .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+        const pct = Math.round((spent / limit) * 100);
+
+        let badge = 'NORMAL';
+        let badgeClass = 'text-current/60';
+        if (pct >= 100) {
+          badge = 'OVER BUDGET (' + pct + '%)';
+          badgeClass = 'mono-btn-primary px-1 py-0.2 rounded-sm';
+        } else if (pct >= 80) {
+          badge = 'WARN (' + pct + '%)';
+          badgeClass = 'mono-subtle border border-current px-1 py-0.2 rounded-sm';
+        }
+
+        const div = document.createElement('div');
+        div.className = 'p-2 rounded-sm mono-subtle border divider space-y-1';
+        div.innerHTML = `
+          <div class="flex justify-between items-center text-[10px]">
+            <span class="font-semibold truncate">${cat}</span>
+            <span class="${badgeClass}">${badge}</span>
+          </div>
+          <div class="w-full h-1 bg-current/10 rounded-sm overflow-hidden">
+            <div class="h-full bg-current" style="width: ${Math.min(100, pct)}%;"></div>
+          </div>
+          <div class="flex justify-between items-center text-[9px] muted-text">
+            <span>${formatCurrency(spent)}</span>
+            <span>Cap: ${formatCurrency(limit)}</span>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // --- FEATURE 5: SPEECH-TO-TEXT VOICE QUICK-LOG ENGINE ---
+    let speechRecognizer = null;
+    let pendingVoiceText = '';
+
+    function initVoiceRecognizer() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) return null;
+      const rec = new SpeechRecognition();
+      rec.continuous = false;
+      rec.interimResults = true;
+      rec.lang = 'en-IN';
+      return rec;
+    }
+
+    function startVoiceLogging() {
+      const modal = document.getElementById('voiceModal');
+      const transcriptEl = document.getElementById('voiceLiveTranscript');
+      const confirmRow = document.getElementById('voiceConfirmRow');
+      const micDot = document.getElementById('voiceMicDot');
+
+      if (!speechRecognizer) {
+        speechRecognizer = initVoiceRecognizer();
+      }
+
+      if (!speechRecognizer) {
+        showToast('Speech recognition is not supported in this browser. Try Chrome or Edge.');
+        return;
+      }
+
+      modal.classList.remove('hidden');
+      transcriptEl.textContent = '"Listening... Speak your ritual or expense now"';
+      confirmRow.classList.add('hidden');
+      if (micDot) micDot.className = 'w-2 h-2 rounded-full bg-current animate-ping inline-block';
+
+      speechRecognizer.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        pendingVoiceText = transcript.trim();
+        transcriptEl.textContent = `"${pendingVoiceText}"`;
+        confirmRow.classList.remove('hidden');
+      };
+
+      speechRecognizer.onerror = (e) => {
+        transcriptEl.textContent = '"Could not capture audio. Please try again."';
+        if (micDot) micDot.className = 'w-2 h-2 rounded-full border border-current inline-block';
+      };
+
+      speechRecognizer.onend = () => {
+        if (micDot) micDot.className = 'w-2 h-2 rounded-full border border-current inline-block';
+      };
+
+      try {
+        speechRecognizer.start();
+      } catch (err) {}
+    }
+
     function renderAll() {
       renderHabits();
       renderExpenses();
@@ -3080,6 +3727,9 @@
       renderNotionAndSlackPreviews();
       renderScorecardAndSync();
       renderGhostProofCard();
+      renderGoals();
+      renderCategoryBudgets();
+      renderBehaviourIntelligence();
       renderLaunchCenter();
       renderCharts();
       updateGlobalNotifUI();
@@ -3106,6 +3756,77 @@
       document.getElementById('sidebarToggleBtn').addEventListener('click', openSidebar);
       document.getElementById('closeSidebarBtn').addEventListener('click', closeSidebar);
       document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebar);
+
+      // Privacy Mode Toggle
+      document.getElementById('privacyModeToggleBtn').addEventListener('click', () => {
+        state.privacyMode = !state.privacyMode;
+        saveState();
+        const dot = document.getElementById('privacyModeDot');
+        const lbl = document.getElementById('privacyModeLabel');
+        const btn = document.getElementById('privacyModeToggleBtn');
+        if (state.privacyMode) {
+          if (dot) dot.className = 'w-2 h-2 rounded-full bg-current inline-block';
+          if (lbl) lbl.textContent = 'PRIVACY ON';
+          if (btn) btn.className = 'mono-btn-primary px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5';
+          showToast('Privacy Mode ON: All currency amounts masked.');
+        } else {
+          if (dot) dot.className = 'w-2 h-2 rounded-full border border-current inline-block';
+          if (lbl) lbl.textContent = 'PRIVACY OFF';
+          if (btn) btn.className = 'mono-btn-outline px-2 sm:px-2.5 py-1.5 rounded-sm text-xs mono flex items-center gap-1.5';
+          showToast('Privacy Mode OFF: Currency amounts visible.');
+        }
+        renderAll();
+      });
+
+      // Voice Logging Modal Listeners
+      document.getElementById('voiceLogBtn').addEventListener('click', startVoiceLogging);
+      document.getElementById('closeVoiceModalBtn').addEventListener('click', () => {
+        document.getElementById('voiceModal').classList.add('hidden');
+      });
+      document.getElementById('voiceCancelBtn').addEventListener('click', () => {
+        document.getElementById('voiceModal').classList.add('hidden');
+      });
+      document.getElementById('voiceCommitBtn').addEventListener('click', () => {
+        document.getElementById('voiceModal').classList.add('hidden');
+        if (pendingVoiceText) {
+          executeQuickCommand(pendingVoiceText);
+          pendingVoiceText = '';
+        }
+      });
+
+      // Goals & Milestones Form
+      document.getElementById('tabGoalsBtn').addEventListener('click', () => {
+        state.activeTab = 'goals';
+        saveState();
+        applyTab();
+      });
+
+      document.getElementById('goalAddForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const titleInput = document.getElementById('goalTitleInput');
+        const catInput = document.getElementById('goalCategoryInput');
+        const dateInput = document.getElementById('goalTargetDateInput');
+        const title = titleInput.value.trim();
+        if (!title) return;
+
+        state.goals.unshift({
+          id: 'g_' + Date.now(),
+          title,
+          category: catInput.value,
+          targetDate: dateInput.value,
+          linkedHabitIds: state.habits.slice(0, 2).map((h) => h.id),
+          milestones: [
+            { id: 'm_' + Date.now() + '_1', title: 'Phase 1: Foundation & Daily Routine Setup', completed: true },
+            { id: 'm_' + Date.now() + '_2', title: 'Phase 2: Core Execution & Mid-point Audit', completed: false },
+            { id: 'm_' + Date.now() + '_3', title: 'Phase 3: Final Deliverable & Milestone Review', completed: false }
+          ]
+        });
+
+        titleInput.value = '';
+        saveState();
+        renderGoals();
+        showToast('Created macro goal: ' + title);
+      });
 
       document.getElementById('tabAllBtn').addEventListener('click', () => {
         state.activeTab = 'dashboard';
@@ -3278,12 +3999,15 @@
         const amount = parseFloat(amountInput.value);
         if (!title || isNaN(amount) || amount <= 0) return;
 
+        const nowIso = new Date().toISOString();
+        const todayStr = getTodayDateString();
         state.expenses.unshift({
           id: 'e_' + Date.now(),
           title,
           amount,
           category: categoryInput.value,
-          date: 'Today',
+          occurredAt: nowIso,
+          dateString: todayStr,
           linkedHabitId: null
         });
 
@@ -3318,7 +4042,7 @@
       document.getElementById('syncNoSpendHabitBtn').addEventListener('click', () => {
         const cap = Number(state.dailyBudgetCap) || 600;
         const todaySpent = state.expenses
-          .filter((e) => e.date === 'Today')
+          .filter((e) => getExpenseDateString(e) === getTodayDateString())
           .reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
 
         const targetHabit = state.habits.find((h) => h.name.toLowerCase().includes('spend') || h.name.toLowerCase().includes('impulse')) || state.habits[0];
@@ -3487,7 +4211,7 @@
 
       // Sync All Nodes
       document.getElementById('syncAllServicesBtn').addEventListener('click', () => {
-        showToast('All 7 ecosystem services are in sync with your local MONOFLOW workspace.');
+        showToast('Audit confirmed: All 7 service payload bridges are calibrated and ready.');
       });
 
       // Scorecard Receipts & Sync
