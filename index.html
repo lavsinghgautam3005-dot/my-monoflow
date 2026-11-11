@@ -131,6 +131,107 @@
     .breathe-animation {
       animation: breatheCycle 19s ease-in-out infinite;
     }
+
+    /* MONOFLOW 2.0 — Lumen-inspired neo-brutalist visual system */
+    :root {
+      --bg: #f8f3e7;
+      --bg-subtle: #fffdf6;
+      --fg: #171715;
+      --fg-muted: #68665f;
+      --border: #24231f;
+      --border-strong: #171715;
+      --accent: #b69cff;
+      --accent-fg: #171715;
+      --mf-lavender: #b69cff;
+      --mf-yellow: #ffe477;
+      --mf-cyan: #91dfeb;
+      --mf-lime: #c7ef79;
+      --mf-peach: #ffbd98;
+      --mf-pink: #f28dbb;
+    }
+    html.dark {
+      --bg: #20201e;
+      --bg-subtle: #2b2b28;
+      --fg: #f7f2e7;
+      --fg-muted: #b8b4aa;
+      --border: #080808;
+      --border-strong: #080808;
+      --accent: #b69cff;
+      --accent-fg: #171715;
+    }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(rgba(30,29,26,.10) 1px, transparent 1px);
+      background-size: 18px 18px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    html.dark body {
+      background-image: radial-gradient(rgba(255,255,255,.055) 1px, transparent 1px);
+    }
+    body > div.max-w-6xl { max-width: 1120px; padding-bottom: 5.5rem; }
+    header {
+      background: var(--mf-lavender);
+      color: #171715;
+      border: 2px solid #171715 !important;
+      border-radius: 12px;
+      padding: 14px 16px !important;
+      margin: 0 -2px 1.25rem;
+      box-shadow: 5px 5px 0 #080808;
+    }
+    header .muted-text { color: #37313f; }
+    .mono-card {
+      border: 2px solid var(--border-strong);
+      border-radius: 10px !important;
+      box-shadow: 4px 4px 0 #080808;
+      background: var(--bg-subtle);
+      transition: transform .16s ease, box-shadow .16s ease, background-color .2s ease;
+    }
+    .mono-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+    .mono-subtle {
+      border: 1.5px solid var(--border-strong);
+      border-radius: 8px !important;
+      background: var(--bg);
+    }
+    .mono-btn-primary, .mono-btn-outline, .mono-input {
+      border: 2px solid var(--border-strong) !important;
+      border-radius: 7px !important;
+      box-shadow: 2px 2px 0 #080808;
+    }
+    .mono-btn-primary {
+      background: var(--mf-lavender);
+      color: #171715;
+      font-weight: 700;
+    }
+    .mono-btn-outline {
+      background: var(--bg-subtle);
+      color: var(--fg);
+    }
+    .mono-btn-outline:hover, .mono-btn-outline.active {
+      background: var(--mf-lavender);
+      color: #171715;
+      border-color: #080808;
+    }
+    .mono-input { background: var(--bg-subtle); }
+    button { transition: transform .12s ease, box-shadow .12s ease, background-color .15s ease; }
+    button:active { transform: translate(2px,2px) !important; box-shadow: 0 0 0 #080808 !important; }
+    input, select, textarea { border-radius: 7px !important; }
+    h1, h2, h3, h4 { letter-spacing: -.035em; }
+    .mono-card:nth-of-type(4n+1) { --card-tint: var(--mf-yellow); }
+    #dashboardView > section:nth-child(4n+1) { background-color: color-mix(in srgb, var(--mf-yellow) 28%, var(--bg-subtle)); }
+    #dashboardView > section:nth-child(4n+2) { background-color: color-mix(in srgb, var(--mf-cyan) 25%, var(--bg-subtle)); }
+    #dashboardView > section:nth-child(4n+3) { background-color: color-mix(in srgb, var(--mf-lime) 25%, var(--bg-subtle)); }
+    #dashboardView > section:nth-child(4n) { background-color: color-mix(in srgb, var(--mf-peach) 25%, var(--bg-subtle)); }
+    #sidebarDrawer { border-right: 2px solid #080808 !important; box-shadow: 6px 0 0 rgba(0,0,0,.18); }
+    #statusToast, #ghostModeBanner { border: 2px solid var(--border-strong); box-shadow: 3px 3px 0 #080808; }
+    canvas { max-width: 100%; }
+    @media (max-width: 640px) {
+      body > div.max-w-6xl { padding-left: 14px; padding-right: 14px; padding-top: 12px; }
+      header { margin-bottom: 1rem; padding: 12px !important; }
+      header > div { align-items: flex-start; }
+      header .flex.items-center.gap-1 { max-width: 54%; }
+      .mono-card { box-shadow: 3px 3px 0 #080808; }
+    }
+
   </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-neutral-500 selection:text-white">
