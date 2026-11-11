@@ -232,6 +232,63 @@
       .mono-card { box-shadow: 3px 3px 0 #080808; }
     }
 
+
+    /* MONOFLOW multi-device experience layer */
+    :root { --mf-safe-bottom: env(safe-area-inset-bottom, 0px); }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { min-height: 100dvh; overscroll-behavior-y: contain; }
+    button, a, input, select, textarea { touch-action: manipulation; }
+    button, [role="button"] { min-height: 40px; }
+    :focus-visible { outline: 3px solid #6d4bc3 !important; outline-offset: 3px; }
+    .mf-mobile-nav { display: none; }
+    @media (min-width: 641px) and (max-width: 1024px) {
+      body > div.max-w-6xl { max-width: 920px; padding-left: 24px; padding-right: 24px; }
+      #dashboardView { gap: 1.25rem; }
+      .mono-card { box-shadow: 3px 3px 0 #080808; }
+      header { position: sticky; top: 10px; z-index: 30; }
+    }
+    @media (max-width: 767px) {
+      body { padding-bottom: calc(76px + var(--mf-safe-bottom)); }
+      body > div.max-w-6xl { padding: 10px 12px calc(24px + var(--mf-safe-bottom)); }
+      header { position: sticky; top: 6px; z-index: 30; margin-left: 0; margin-right: 0; }
+      header > div { gap: 8px; }
+      header .flex.items-center.gap-1 { max-width: 58%; }
+      .mf-mobile-nav {
+        display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+        position: fixed; z-index: 60; left: 10px; right: 10px; bottom: calc(8px + var(--mf-safe-bottom));
+        padding: 7px; gap: 5px; background: var(--bg-subtle);
+        border: 2px solid var(--border-strong); border-radius: 13px;
+        box-shadow: 4px 4px 0 #080808;
+      }
+      .mf-mobile-nav button {
+        min-width: 0; min-height: 52px; border: 1.5px solid transparent;
+        border-radius: 8px; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 2px;
+        background: transparent; color: var(--fg); font-size: 10px; font-weight: 700;
+      }
+      .mf-mobile-nav button[aria-current="page"] {
+        background: var(--mf-lavender); color: #171715;
+        border-color: #171715; box-shadow: 2px 2px 0 #080808;
+      }
+      .mf-mobile-nav .mf-nav-icon { font-size: 17px; line-height: 1; }
+      .mono-card { min-width: 0; }
+      input, select, textarea { max-width: 100%; font-size: 16px !important; }
+      canvas { height: auto; }
+    }
+    @media (max-width: 380px) {
+      header .mono-btn-outline { padding-left: 7px !important; padding-right: 7px !important; }
+      #voiceLogBtn span:last-child { display: none; }
+      .mf-mobile-nav { left: 6px; right: 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+    @media print {
+      .mf-mobile-nav, #sidebarDrawer, #sidebarBackdrop, header { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .mono-card { box-shadow: none !important; break-inside: avoid; }
+    }
+
   </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-neutral-500 selection:text-white">
@@ -4477,6 +4534,48 @@
         navigator.serviceWorker.register('sw.js').catch(() => {});
       }
     });
+  </script>
+
+  <nav class="mf-mobile-nav" aria-label="Primary navigation">
+    <button type="button" data-mf-tab="dashboard" aria-current="page"><span class="mf-nav-icon">⌂</span><span>Home</span></button>
+    <button type="button" data-mf-tab="goals"><span class="mf-nav-icon">◎</span><span>Goals</span></button>
+    <button type="button" data-mf-tab="vault"><span class="mf-nav-icon">▤</span><span>Vault</span></button>
+    <button type="button" data-mf-tab="scorecard"><span class="mf-nav-icon">▦</span><span>Review</span></button>
+  </nav>
+
+  <script>
+    // Mobile/tablet navigation reuses the existing view system; no duplicate app state.
+    (function () {
+      function syncMobileNav() {
+        document.querySelectorAll('[data-mf-tab]').forEach(function (button) {
+          if (button.dataset.mfTab === (window.state && state.activeTab || 'dashboard')) {
+            button.setAttribute('aria-current', 'page');
+          } else {
+            button.removeAttribute('aria-current');
+          }
+        });
+      }
+      document.querySelectorAll('[data-mf-tab]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          if (!window.state) return;
+          state.activeTab = button.dataset.mfTab;
+          if (typeof saveState === 'function') saveState();
+          if (typeof applyTab === 'function') applyTab();
+          syncMobileNav();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+      var originalApplyTab = window.applyTab;
+      if (typeof originalApplyTab === 'function') {
+        window.applyTab = function () {
+          originalApplyTab();
+          syncMobileNav();
+        };
+      }
+      document.addEventListener('DOMContentLoaded', syncMobileNav);
+      window.addEventListener('pageshow', syncMobileNav);
+      setTimeout(syncMobileNav, 0);
+    })();
   </script>
 </body>
 </html>
