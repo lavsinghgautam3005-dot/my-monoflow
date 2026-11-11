@@ -4,9 +4,9 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0a0a0a",
-  "theme_color": "#0a0a0a",
-  "description": "Minimalist monochrome habit tracker and personal expense studio.",
+  "background_color": "#f8f3e7",
+  "theme_color": "#b69cff",
+  "description": "A personal space for habits, goals, focus, and everyday finances.",
   "icons": [
     {
       "src": "icon-192.png",
