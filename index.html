@@ -1824,7 +1824,12 @@
     function saveState() {
       try {
         localStorage.setItem('monoflow_step1_state', JSON.stringify(state));
-      } catch (err) {}
+        return true;
+      } catch (err) {
+        console.error('MONOFLOW could not save workspace data:', err);
+        window.__monoflowStorageError = err;
+        return false;
+      }
     }
 
     function showToast(message) {
@@ -3314,7 +3319,13 @@
 
     // --- JSON BACKUP ---
     function triggerJsonBackupDownload() {
-      const payload = JSON.stringify(state, null, 2);
+      const backup = {
+        app: 'MONOFLOW',
+        backupVersion: 1,
+        exportedAt: new Date().toISOString(),
+        state: state
+      };
+      const payload = JSON.stringify(backup, null, 2);
       const blob = new Blob([payload], { type: 'application/json;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -3560,7 +3571,7 @@
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const currentHHMM = hours + ':' + minutes;
-        const todayDate = now.toISOString().slice(0, 10);
+        const todayDate = getTodayDateString();
 
         state.habits.forEach((habit) => {
           if (habit.scheduleTime && habit.notifyEnabled && habit.scheduleTime === currentHHMM) {
@@ -4497,19 +4508,40 @@
         const reader = new FileReader();
         reader.onload = (ev) => {
           try {
-            const imported = JSON.parse(ev.target.result);
-            if (imported && Array.isArray(imported.habits) && Array.isArray(imported.expenses)) {
-              state = { ...defaultState, ...imported };
-              saveState();
-              applyTheme();
-              applyTab();
-              renderAll();
-              showToast('Restored workspace state from backup.');
-            } else {
-              showToast('Invalid backup file structure.');
+            const parsed = JSON.parse(ev.target.result);
+            // Accept both the versioned MONOFLOW format and older raw-state backups.
+            const imported = parsed && parsed.app === 'MONOFLOW' && parsed.state
+              ? parsed.state
+              : parsed;
+            if (!imported || !Array.isArray(imported.habits) || !Array.isArray(imported.expenses)) {
+              showToast('Invalid backup: habits and expenses are required.');
+              return;
             }
+            if (!window.confirm('Restore this backup? Your current MONOFLOW data will be replaced. Export a backup first if you want to keep it.')) {
+              return;
+            }
+            const restored = { ...defaultState, ...imported };
+            restored.habits = restored.habits.map((habit, index) => ({
+              ...habit,
+              week: Array.isArray(habit.week) && habit.week.length === 7
+                ? habit.week
+                : [true, index % 2 === 0, true, true, index !== 1, true, !!habit.completedToday]
+            }));
+            restored.expenses = restored.expenses.filter((expense) =>
+              expense && typeof expense === 'object' && Number.isFinite(Number(expense.amount))
+            );
+            state = restored;
+            if (!saveState()) {
+              showToast('Restore could not be saved. Check browser storage space/settings.');
+              return;
+            }
+            applyTheme();
+            applyTab();
+            renderAll();
+            showToast('Workspace restored successfully.');
           } catch (err) {
-            showToast('Could not parse JSON backup file.');
+            console.error('MONOFLOW backup import failed:', err);
+            showToast('Could not read this backup file.');
           }
         };
         reader.readAsText(file);
