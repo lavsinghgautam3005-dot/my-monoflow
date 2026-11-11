@@ -131,6 +131,164 @@
     .breathe-animation {
       animation: breatheCycle 19s ease-in-out infinite;
     }
+
+    /* MONOFLOW 2.0 — Lumen-inspired neo-brutalist visual system */
+    :root {
+      --bg: #f8f3e7;
+      --bg-subtle: #fffdf6;
+      --fg: #171715;
+      --fg-muted: #68665f;
+      --border: #24231f;
+      --border-strong: #171715;
+      --accent: #b69cff;
+      --accent-fg: #171715;
+      --mf-lavender: #b69cff;
+      --mf-yellow: #ffe477;
+      --mf-cyan: #91dfeb;
+      --mf-lime: #c7ef79;
+      --mf-peach: #ffbd98;
+      --mf-pink: #f28dbb;
+    }
+    html.dark {
+      --bg: #20201e;
+      --bg-subtle: #2b2b28;
+      --fg: #f7f2e7;
+      --fg-muted: #b8b4aa;
+      --border: #080808;
+      --border-strong: #080808;
+      --accent: #b69cff;
+      --accent-fg: #171715;
+    }
+    body {
+      background-color: var(--bg);
+      background-image: radial-gradient(rgba(30,29,26,.10) 1px, transparent 1px);
+      background-size: 18px 18px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    html.dark body {
+      background-image: radial-gradient(rgba(255,255,255,.055) 1px, transparent 1px);
+    }
+    body > div.max-w-6xl { max-width: 1120px; padding-bottom: 5.5rem; }
+    header {
+      background: var(--mf-lavender);
+      color: #171715;
+      border: 2px solid #171715 !important;
+      border-radius: 12px;
+      padding: 14px 16px !important;
+      margin: 0 -2px 1.25rem;
+      box-shadow: 5px 5px 0 #080808;
+    }
+    header .muted-text { color: #37313f; }
+    .mono-card {
+      border: 2px solid var(--border-strong);
+      border-radius: 10px !important;
+      box-shadow: 4px 4px 0 #080808;
+      background: var(--bg-subtle);
+      transition: transform .16s ease, box-shadow .16s ease, background-color .2s ease;
+    }
+    .mono-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
+    .mono-subtle {
+      border: 1.5px solid var(--border-strong);
+      border-radius: 8px !important;
+      background: var(--bg);
+    }
+    .mono-btn-primary, .mono-btn-outline, .mono-input {
+      border: 2px solid var(--border-strong) !important;
+      border-radius: 7px !important;
+      box-shadow: 2px 2px 0 #080808;
+    }
+    .mono-btn-primary {
+      background: var(--mf-lavender);
+      color: #171715;
+      font-weight: 700;
+    }
+    .mono-btn-outline {
+      background: var(--bg-subtle);
+      color: var(--fg);
+    }
+    .mono-btn-outline:hover, .mono-btn-outline.active {
+      background: var(--mf-lavender);
+      color: #171715;
+      border-color: #080808;
+    }
+    .mono-input { background: var(--bg-subtle); }
+    button { transition: transform .12s ease, box-shadow .12s ease, background-color .15s ease; }
+    button:active { transform: translate(2px,2px) !important; box-shadow: 0 0 0 #080808 !important; }
+    input, select, textarea { border-radius: 7px !important; }
+    h1, h2, h3, h4 { letter-spacing: -.035em; }
+    .mono-card:nth-of-type(4n+1) { --card-tint: var(--mf-yellow); }
+    #dashboardView > section:nth-child(4n+1) { background-color: color-mix(in srgb, var(--mf-yellow) 28%, var(--bg-subtle)); }
+    #dashboardView > section:nth-child(4n+2) { background-color: color-mix(in srgb, var(--mf-cyan) 25%, var(--bg-subtle)); }
+    #dashboardView > section:nth-child(4n+3) { background-color: color-mix(in srgb, var(--mf-lime) 25%, var(--bg-subtle)); }
+    #dashboardView > section:nth-child(4n) { background-color: color-mix(in srgb, var(--mf-peach) 25%, var(--bg-subtle)); }
+    #sidebarDrawer { border-right: 2px solid #080808 !important; box-shadow: 6px 0 0 rgba(0,0,0,.18); }
+    #statusToast, #ghostModeBanner { border: 2px solid var(--border-strong); box-shadow: 3px 3px 0 #080808; }
+    canvas { max-width: 100%; }
+    @media (max-width: 640px) {
+      body > div.max-w-6xl { padding-left: 14px; padding-right: 14px; padding-top: 12px; }
+      header { margin-bottom: 1rem; padding: 12px !important; }
+      header > div { align-items: flex-start; }
+      header .flex.items-center.gap-1 { max-width: 54%; }
+      .mono-card { box-shadow: 3px 3px 0 #080808; }
+    }
+
+
+    /* MONOFLOW multi-device experience layer */
+    :root { --mf-safe-bottom: env(safe-area-inset-bottom, 0px); }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { min-height: 100dvh; overscroll-behavior-y: contain; }
+    button, a, input, select, textarea { touch-action: manipulation; }
+    button, [role="button"] { min-height: 40px; }
+    :focus-visible { outline: 3px solid #6d4bc3 !important; outline-offset: 3px; }
+    .mf-mobile-nav { display: none; }
+    @media (min-width: 641px) and (max-width: 1024px) {
+      body > div.max-w-6xl { max-width: 920px; padding-left: 24px; padding-right: 24px; }
+      #dashboardView { gap: 1.25rem; }
+      .mono-card { box-shadow: 3px 3px 0 #080808; }
+      header { position: sticky; top: 10px; z-index: 30; }
+    }
+    @media (max-width: 767px) {
+      body { padding-bottom: calc(76px + var(--mf-safe-bottom)); }
+      body > div.max-w-6xl { padding: 10px 12px calc(24px + var(--mf-safe-bottom)); }
+      header { position: sticky; top: 6px; z-index: 30; margin-left: 0; margin-right: 0; }
+      header > div { gap: 8px; }
+      header .flex.items-center.gap-1 { max-width: 58%; }
+      .mf-mobile-nav {
+        display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+        position: fixed; z-index: 60; left: 10px; right: 10px; bottom: calc(8px + var(--mf-safe-bottom));
+        padding: 7px; gap: 5px; background: var(--bg-subtle);
+        border: 2px solid var(--border-strong); border-radius: 13px;
+        box-shadow: 4px 4px 0 #080808;
+      }
+      .mf-mobile-nav button {
+        min-width: 0; min-height: 52px; border: 1.5px solid transparent;
+        border-radius: 8px; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; gap: 2px;
+        background: transparent; color: var(--fg); font-size: 10px; font-weight: 700;
+      }
+      .mf-mobile-nav button[aria-current="page"] {
+        background: var(--mf-lavender); color: #171715;
+        border-color: #171715; box-shadow: 2px 2px 0 #080808;
+      }
+      .mf-mobile-nav .mf-nav-icon { font-size: 17px; line-height: 1; }
+      .mono-card { min-width: 0; }
+      input, select, textarea { max-width: 100%; font-size: 16px !important; }
+      canvas { height: auto; }
+    }
+    @media (max-width: 380px) {
+      header .mono-btn-outline { padding-left: 7px !important; padding-right: 7px !important; }
+      #voiceLogBtn span:last-child { display: none; }
+      .mf-mobile-nav { left: 6px; right: 6px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+    @media print {
+      .mf-mobile-nav, #sidebarDrawer, #sidebarBackdrop, header { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .mono-card { box-shadow: none !important; break-inside: avoid; }
+    }
+
   </style>
 </head>
 <body class="min-h-screen antialiased selection:bg-neutral-500 selection:text-white">
@@ -1666,7 +1824,18 @@
     function saveState() {
       try {
         localStorage.setItem('monoflow_step1_state', JSON.stringify(state));
-      } catch (err) {}
+        return true;
+      } catch (err) {
+        console.error('MONOFLOW could not save workspace data:', err);
+        window.__monoflowStorageError = err;
+        const toast = document.getElementById('statusToast');
+        const message = document.getElementById('statusToastText');
+        if (toast && message) {
+          message.textContent = 'Storage is unavailable or full. Export a backup and check browser storage settings.';
+          toast.classList.remove('hidden');
+        }
+        return false;
+      }
     }
 
     function showToast(message) {
@@ -3156,7 +3325,13 @@
 
     // --- JSON BACKUP ---
     function triggerJsonBackupDownload() {
-      const payload = JSON.stringify(state, null, 2);
+      const backup = {
+        app: 'MONOFLOW',
+        backupVersion: 1,
+        exportedAt: new Date().toISOString(),
+        state: state
+      };
+      const payload = JSON.stringify(backup, null, 2);
       const blob = new Blob([payload], { type: 'application/json;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -3402,7 +3577,7 @@
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const currentHHMM = hours + ':' + minutes;
-        const todayDate = now.toISOString().slice(0, 10);
+        const todayDate = getTodayDateString();
 
         state.habits.forEach((habit) => {
           if (habit.scheduleTime && habit.notifyEnabled && habit.scheduleTime === currentHHMM) {
@@ -4022,10 +4197,15 @@
 
       // Clear Expenses
       document.getElementById('clearExpensesBtn').addEventListener('click', () => {
+        if (!state.expenses.length) {
+          showToast('Your expense ledger is already empty.');
+          return;
+        }
+        if (!window.confirm('Delete all expense records? This cannot be undone unless you have a backup.')) return;
         state.expenses = [];
         saveState();
         renderAll();
-        showToast('Cleared expense ledger.');
+        showToast('Expense ledger cleared.');
       });
 
       // Budget Cap Controls
@@ -4339,19 +4519,40 @@
         const reader = new FileReader();
         reader.onload = (ev) => {
           try {
-            const imported = JSON.parse(ev.target.result);
-            if (imported && Array.isArray(imported.habits) && Array.isArray(imported.expenses)) {
-              state = { ...defaultState, ...imported };
-              saveState();
-              applyTheme();
-              applyTab();
-              renderAll();
-              showToast('Restored workspace state from backup.');
-            } else {
-              showToast('Invalid backup file structure.');
+            const parsed = JSON.parse(ev.target.result);
+            // Accept both the versioned MONOFLOW format and older raw-state backups.
+            const imported = parsed && parsed.app === 'MONOFLOW' && parsed.state
+              ? parsed.state
+              : parsed;
+            if (!imported || !Array.isArray(imported.habits) || !Array.isArray(imported.expenses)) {
+              showToast('Invalid backup: habits and expenses are required.');
+              return;
             }
+            if (!window.confirm('Restore this backup? Your current MONOFLOW data will be replaced. Export a backup first if you want to keep it.')) {
+              return;
+            }
+            const restored = { ...defaultState, ...imported };
+            restored.habits = restored.habits.map((habit, index) => ({
+              ...habit,
+              week: Array.isArray(habit.week) && habit.week.length === 7
+                ? habit.week
+                : [true, index % 2 === 0, true, true, index !== 1, true, !!habit.completedToday]
+            }));
+            restored.expenses = restored.expenses.filter((expense) =>
+              expense && typeof expense === 'object' && Number.isFinite(Number(expense.amount))
+            );
+            state = restored;
+            if (!saveState()) {
+              showToast('Restore could not be saved. Check browser storage space/settings.');
+              return;
+            }
+            applyTheme();
+            applyTab();
+            renderAll();
+            showToast('Workspace restored successfully.');
           } catch (err) {
-            showToast('Could not parse JSON backup file.');
+            console.error('MONOFLOW backup import failed:', err);
+            showToast('Could not read this backup file.');
           }
         };
         reader.readAsText(file);
@@ -4359,6 +4560,7 @@
       });
 
       document.getElementById('resetFactoryDefaultsBtn').addEventListener('click', () => {
+        if (!window.confirm('Reset MONOFLOW to its demo defaults? All current habits, expenses, goals, and settings in this browser will be replaced. Export a backup first if you want to keep them.')) return;
         state = JSON.parse(JSON.stringify(defaultState));
         state.habits = state.habits.map((h, idx) => ({
           ...h,
@@ -4376,6 +4578,48 @@
         navigator.serviceWorker.register('sw.js').catch(() => {});
       }
     });
+  </script>
+
+  <nav class="mf-mobile-nav" aria-label="Primary navigation">
+    <button type="button" data-mf-tab="dashboard" aria-current="page"><span class="mf-nav-icon">⌂</span><span>Home</span></button>
+    <button type="button" data-mf-tab="goals"><span class="mf-nav-icon">◎</span><span>Goals</span></button>
+    <button type="button" data-mf-tab="vault"><span class="mf-nav-icon">▤</span><span>Vault</span></button>
+    <button type="button" data-mf-tab="scorecard"><span class="mf-nav-icon">▦</span><span>Review</span></button>
+  </nav>
+
+  <script>
+    // Mobile/tablet navigation reuses the existing view system; no duplicate app state.
+    (function () {
+      function syncMobileNav() {
+        document.querySelectorAll('[data-mf-tab]').forEach(function (button) {
+          if (button.dataset.mfTab === ((typeof state !== 'undefined' && state.activeTab) || 'dashboard')) {
+            button.setAttribute('aria-current', 'page');
+          } else {
+            button.removeAttribute('aria-current');
+          }
+        });
+      }
+      document.querySelectorAll('[data-mf-tab]').forEach(function (button) {
+        button.addEventListener('click', function () {
+          if (typeof state === 'undefined') return;
+          state.activeTab = button.dataset.mfTab;
+          if (typeof saveState === 'function') saveState();
+          if (typeof applyTab === 'function') applyTab();
+          syncMobileNav();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+      var originalApplyTab = window.applyTab;
+      if (typeof originalApplyTab === 'function') {
+        window.applyTab = function () {
+          originalApplyTab();
+          syncMobileNav();
+        };
+      }
+      document.addEventListener('DOMContentLoaded', syncMobileNav);
+      window.addEventListener('pageshow', syncMobileNav);
+      setTimeout(syncMobileNav, 0);
+    })();
   </script>
 </body>
 </html>
