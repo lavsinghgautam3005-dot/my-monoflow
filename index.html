@@ -1828,6 +1828,12 @@
       } catch (err) {
         console.error('MONOFLOW could not save workspace data:', err);
         window.__monoflowStorageError = err;
+        const toast = document.getElementById('statusToast');
+        const message = document.getElementById('statusToastText');
+        if (toast && message) {
+          message.textContent = 'Storage is unavailable or full. Export a backup and check browser storage settings.';
+          toast.classList.remove('hidden');
+        }
         return false;
       }
     }
@@ -4191,10 +4197,15 @@
 
       // Clear Expenses
       document.getElementById('clearExpensesBtn').addEventListener('click', () => {
+        if (!state.expenses.length) {
+          showToast('Your expense ledger is already empty.');
+          return;
+        }
+        if (!window.confirm('Delete all expense records? This cannot be undone unless you have a backup.')) return;
         state.expenses = [];
         saveState();
         renderAll();
-        showToast('Cleared expense ledger.');
+        showToast('Expense ledger cleared.');
       });
 
       // Budget Cap Controls
@@ -4549,6 +4560,7 @@
       });
 
       document.getElementById('resetFactoryDefaultsBtn').addEventListener('click', () => {
+        if (!window.confirm('Reset MONOFLOW to its demo defaults? All current habits, expenses, goals, and settings in this browser will be replaced. Export a backup first if you want to keep them.')) return;
         state = JSON.parse(JSON.stringify(defaultState));
         state.habits = state.habits.map((h, idx) => ({
           ...h,
