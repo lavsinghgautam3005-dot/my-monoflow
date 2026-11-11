@@ -4548,7 +4548,7 @@
     (function () {
       function syncMobileNav() {
         document.querySelectorAll('[data-mf-tab]').forEach(function (button) {
-          if (button.dataset.mfTab === (window.state && state.activeTab || 'dashboard')) {
+          if (button.dataset.mfTab === ((typeof state !== 'undefined' && state.activeTab) || 'dashboard')) {
             button.setAttribute('aria-current', 'page');
           } else {
             button.removeAttribute('aria-current');
@@ -4557,7 +4557,7 @@
       }
       document.querySelectorAll('[data-mf-tab]').forEach(function (button) {
         button.addEventListener('click', function () {
-          if (!window.state) return;
+          if (typeof state === 'undefined') return;
           state.activeTab = button.dataset.mfTab;
           if (typeof saveState === 'function') saveState();
           if (typeof applyTab === 'function') applyTab();
